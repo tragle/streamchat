@@ -1,0 +1,8 @@
+<template name="MasterLayout">
+{{> Header}}
+{{#if currentUser}}
+{{> yield}}
+{{else}}
+{{> Login}}
+{{/if}}
+</template>
