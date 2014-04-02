@@ -4,7 +4,7 @@
     <a class="navbar-brand" href="/">streamchat</a>
     {{#if currentUser}}
     <ul class="nav navbar-nav">
-      <li><a href="">agent</a></li>
+      <li><a href="{{pathFor 'agent'}}">agent</a></li>
       <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin <b
           class="caret"></b></a>
@@ -13,6 +13,7 @@
         <li><a href="{{pathFor 'streams.index'}}">streams</a></li>
       </ul>
       </li>
+      <li><a href="{{pathFor 'messages.index'}}">messages</a></li>
     </ul>
     <div class="navbar-right">
       <small>

@@ -1,0 +1,10 @@
+<template name="AgentChatlog">
+<div id="agent-chatlog">
+  {{#each messages}}
+  <div class="message"><span class="sender">{{senderName}}</span> <span class="body">{{body}}</span></div>
+  {{/each}}
+  {{#each previews}}
+  <div class="message preview text-muted"><span class="sender">{{this.profile.displayname}}</span> <span class="body">{{this.profile.typing}}</span></div>
+  {{/each}}
+</div>
+</template>

@@ -1,0 +1,9 @@
+#agent-sidebar {
+    position: fixed;
+    bottom: 80px;
+    top: 50px;
+    right: 0;
+    width:200px;
+    padding: 10px;
+    background: #f5f5f5;
+}

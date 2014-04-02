@@ -1,8 +1,9 @@
 /*****************************************************************************/
-/* StreamsIndex Publish Functions
+/* Messages Methods */
 /*****************************************************************************/
 
-Meteor.publish('streams_index', function () {
-  return Streams.find();
+Meteor.methods({
+  sendMessage: function(message) {
+    return Messages.insert(message);
+  }
 });
-

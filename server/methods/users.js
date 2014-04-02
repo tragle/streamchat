@@ -29,5 +29,8 @@ Meteor.methods({
       Roles.setUserRoles(id, skills, 'skills');
     }
     return id;
+  },
+  setTyping: function(message) {
+    return Meteor.users.update({'_id': this.userId}, {$set: {'profile.typing': message}});
   }
 });
