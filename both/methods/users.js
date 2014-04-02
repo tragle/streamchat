@@ -3,6 +3,7 @@
 /*****************************************************************************/
 
 Meteor.methods({
+
  /*
   * Example:
   *  '/app/users/update/email': function (email) {

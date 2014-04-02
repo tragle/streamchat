@@ -1,3 +1,59 @@
 <template name="StreamsIndex">
-  client/views/streams/streams_index/streams_index.html
+<div class="panel panel-default">
+  <div class="panel-heading">add streams</div>
+  <table class="table" id="add-stream">
+    <thead>
+      <tr><td>Name</td><td>Max per agent</td><td>Max queue</td><td>Agents</td><td></td><td></td></tr>
+    </thead>
+    <tbody>
+      {{#each streams}}
+      <tr id="{{_id}}">
+        <td><input type="text" class="form-control stream-name" value="{{name}}"></td>
+        <td><input type="number" class="form-control stream-max-per-agent" value="{{maxPerAgent}}"></td>
+        <td><input type="number" class="form-control stream-max-queue" value="{{maxQueue}}"></td>
+        <td><div class="dropdown">
+            <span class="form-control dropdown-toggle unselectable" data-toggle="dropdown">Fixed agents <span class="caret"></span></span>
+            <ul class="dropdown-menu stream-agent-picker" role="menu">
+              {{> agentList streamId=this._id}}
+            </ul>
+          </div>
+        </td>
+        <td><button class="btn update-stream">Update</button></td>
+        <td><button class="btn delete-stream">Delete</button></td>
+      </tr>
+      {{/each}}
+      <tr>
+        <td><input id="add-stream-name" type="text" class="form-control" placeholder="Name" required></td>
+        <td><input id="add-stream-max-per-agent" type="number" class="form-control" placeholder="Max visitors per agent"></td>
+        <td><input id="add-stream-max-queue" type="text" class="form-control" placeholder="Max visitors in queue"></td>
+        <td><div class="dropdown">
+            <span class="form-control dropdown-toggle unselectable" data-toggle="dropdown">Fixed agents <span class="caret"></span></span>
+            <ul class="dropdown-menu add-stream-agent-picker" role="menu">
+              {{> agentList}}
+            </ul>
+          </div>
+        </td>
+        <td><button type="submit" id="add-stream-button" class="btn">Add</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </template>
+
+<template name="agentList">
+{{#each agents}}
+<li>
+<div class="checkbox">
+  <label>
+    {{#if assigned}}
+    <input type="checkbox" checked value="{{_id}}">
+    {{else}}
+    <input type="checkbox" value="{{_id}}">
+    {{/if}}
+    <small>{{profile.displayname}} <span class="text-muted">{{username}}</span></small>
+  </label>
+</div>
+</li>
+{{/each}}
+</template>
+

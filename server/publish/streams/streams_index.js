@@ -3,6 +3,9 @@
 /*****************************************************************************/
 
 Meteor.publish('streams_index', function () {
-  // you can remove this if you return a cursor
-  this.ready();
+  return Streams.find();
+});
+
+Meteor.publish('agents', function() {
+  return Meteor.users.find({'roles.permissions': {$in: ['agent']}});
 });
