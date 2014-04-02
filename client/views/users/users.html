@@ -1,0 +1,30 @@
+<template name="UsersIndex">
+<div class="user-settings">
+  <div class="panel panel-default">
+    <table class="table" id="user-admin">
+      <thead>
+        <tr><td>User name</td><td>Display name</td><td>Permissions</td><td>Skills</td><td></td><td></td></tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+        <tr id="{{this._id}}">
+          <td><input type="text" class="form-control user-username" value="{{username}}"></td>
+          <td><input type="text" class="form-control user-displayname" value="{{profile.displayname}}"></td>
+          <td><input type="text" class="form-control user-permissions" value="{{#each roles.permissions}}{{this}} {{/each}}"></td>
+          <td><input type="text" class="form-control user-skills" value="{{#each roles.skills}}{{this}} {{/each}}"></td>
+          <td><button type="button" class="btn update-user">Update</button></td>
+          <td><button type="button" class="btn delete-user">Delete</button></td>
+        </tr>
+        {{/each}}
+        <tr id="new-user">
+          <td><input id="add-user-username" type="email" class="form-control" placeholder="User name" required></td>
+          <td><input id="add-user-name" type="text" class="form-control" placeholder="Display name" required></td>
+          <td><input id="add-user-permissions" type="text" class="form-control" placeholder="Permissions"></td>
+          <td><input id="add-user-skills" type="text" class="form-control" placeholder="Skills"></td>
+          <td><button type="button" id="add-user" class="btn">Add</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</template>
