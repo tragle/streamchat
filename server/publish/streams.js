@@ -1,8 +1,8 @@
 /*****************************************************************************/
-/* StreamsIndex Publish Functions
+/* Streams Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('streams_index', function () {
+Meteor.publish('streams', function () {
   return Streams.find();
 });
 

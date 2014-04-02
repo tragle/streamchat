@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* MessagesIndex: Event Handlers and Helpers */
+/* Messages: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.MessagesIndex.events({
+Template.Messages.events({
   /*
    * Example: 
    *  'click .selector': function (e, tmpl) {
@@ -10,7 +10,7 @@ Template.MessagesIndex.events({
    */
 });
 
-Template.MessagesIndex.helpers({
+Template.Messages.helpers({
   /*
    * Example: 
    *  items: function () {
@@ -22,11 +22,11 @@ Template.MessagesIndex.helpers({
 /*****************************************************************************/
 /* MessagesIndex: Lifecycle Hooks */
 /*****************************************************************************/
-Template.MessagesIndex.created = function () {
+Template.Messages.created = function () {
 };
 
-Template.MessagesIndex.rendered = function () {
+Template.Messages.rendered = function () {
 };
 
-Template.MessagesIndex.destroyed = function () {
+Template.Messages.destroyed = function () {
 };

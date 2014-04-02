@@ -1,4 +1,4 @@
-MessagesIndexController = RouteController.extend({
+MessagesController = RouteController.extend({
   waitOn: function () {
     Meteor.subscribe('messages');
   },

@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* UsersIndex: Event Handlers and Helpers */
+/* Users: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.UsersIndex.events({
+Template.Users.events({
   'click #add-user': function(e) {
     e.preventDefault();
     var user = new App.User();
@@ -27,20 +27,20 @@ Template.UsersIndex.events({
   }
 });
 
-Template.UsersIndex.helpers({
+Template.Users.helpers({
   users: function() {
     return Meteor.users.find({'roles.permissions': {$nin: ['visitor']}});
   }
 });
 
 /*****************************************************************************/
-/* UsersIndex: Lifecycle Hooks */
+/* Users: Lifecycle Hooks */
 /*****************************************************************************/
-Template.UsersIndex.created = function () {
+Template.Users.created = function () {
 };
 
-Template.UsersIndex.rendered = function () {
+Template.Users.rendered = function () {
 };
 
-Template.UsersIndex.destroyed = function () {
+Template.Users.destroyed = function () {
 };

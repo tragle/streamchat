@@ -1,6 +1,6 @@
-UsersIndexController = RouteController.extend({
+UsersController = RouteController.extend({
   waitOn: function () {
-    Meteor.subscribe('users_index');
+    Meteor.subscribe('users');
   },
 
   data: function () {

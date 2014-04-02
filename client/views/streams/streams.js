@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* StreamsIndex: Event Handlers and Helpers */
+/* Streams: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.StreamsIndex.events({
+Template.Streams.events({
   'click #add-stream-button': function(e) {
     e.preventDefault();
     var stream = new App.Stream();
@@ -41,7 +41,7 @@ Template.StreamsIndex.events({
   }
 });
 
-Template.StreamsIndex.helpers({
+Template.Streams.helpers({
   streams: function() {
     return Streams.find();
   }
@@ -61,13 +61,13 @@ Template.agentList.helpers({
 });
 
 /*****************************************************************************/
-/* StreamsIndex: Lifecycle Hooks */
+/* Streams: Lifecycle Hooks */
 /*****************************************************************************/
-Template.StreamsIndex.created = function () {
+Template.Streams.created = function () {
 };
 
-Template.StreamsIndex.rendered = function () {
+Template.Streams.rendered = function () {
 };
 
-Template.StreamsIndex.destroyed = function () {
+Template.Streams.destroyed = function () {
 };

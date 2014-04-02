@@ -10,9 +10,9 @@ Router.configure({
 });
 
 Router.map(function () {
-  this.route('streams.index', {path: '/streams'});
-  this.route('users.index', {path: '/users'});
+  this.route('streams', {path: '/streams'});
+  this.route('users', {path: '/users'});
   this.route('home', {path: '/'});
-  this.route('messages.index', {path: '/messages'});
+  this.route('messages', {path: '/messages'});
   this.route('agent', {path: '/agent'});
 });

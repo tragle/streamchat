@@ -1,8 +1,8 @@
 /*****************************************************************************/
-/* MessagesIndex Publish Functions
+/* Messages Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('messages_index', function () {
+Meteor.publish('messages', function () {
   // you can remove this if you return a cursor
   this.ready();
 });

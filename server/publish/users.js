@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* UsersIndex Publish Functions
+/* Users Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('users_index', function () {
+Meteor.publish('users', function () {
   return Meteor.users.find();
 });
