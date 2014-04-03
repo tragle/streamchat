@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* Agent: Event Handlers and Helpers */
+/* Bookmarks: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.Agent.events({
+Template.Bookmarks.events({
   /*
    * Example: 
    *  'click .selector': function (e, tmpl) {
@@ -10,8 +10,7 @@ Template.Agent.events({
    */
 });
 
-Template.Agent.helpers({
-
+Template.Bookmarks.helpers({
   /*
    * Example: 
    *  items: function () {
@@ -21,13 +20,13 @@ Template.Agent.helpers({
 });
 
 /*****************************************************************************/
-/* Agent: Lifecycle Hooks */
+/* Bookmarks: Lifecycle Hooks */
 /*****************************************************************************/
-Template.Agent.created = function () {
+Template.Bookmarks.created = function () {
 };
 
-Template.Agent.rendered = function () {
+Template.Bookmarks.rendered = function () {
 };
 
-Template.Agent.destroyed = function () {
+Template.Bookmarks.destroyed = function () {
 };

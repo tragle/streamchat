@@ -2,7 +2,8 @@
 /* Messages Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('messages', function () {
-  // you can remove this if you return a cursor
-  this.ready();
+Meteor.publish('messages', function (streamId) {
+  if (streamId) {
+    return Messages.find({'stream': streamId});
+  }
 });

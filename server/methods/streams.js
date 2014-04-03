@@ -9,7 +9,7 @@ Meteor.methods({
   },
   delStream: function(id) {
     App.checkIsAdmin(this.userId);
-    Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedStream': null}});
+    Meteor.users.update({'profile.fixedStream':id}, {$set: {'profile.fixedStream': null}}, {multi:true});
     return Streams.remove({'_id':id});
   },
   updateStream: function(id, options) {
@@ -19,6 +19,20 @@ Meteor.methods({
   },
   addFixedUsers: function(streamId, userIds) {
     App.checkIsAdmin(this.userId);
-    return Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedStream': streamId}});
-  }
+    var result = Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedStream': streamId}}, {multi:true});
+    return result;
+  },
+  getStream: function(issue) {
+    console.log('getting stream');
+    var streams = Meteor.users.find({'roles.skills': {$in: [issue]}}).map(function(doc) {
+      console.log('got user:');
+      console.log(doc);
+      return doc.profile.currentStream;
+    }); 
+    console.log('got streams:');
+    console.log(streams);
+    if (streams.length) {
+      return streams[0]._id;
+    }
+  } 
 });

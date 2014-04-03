@@ -1,11 +1,19 @@
 AgentController = RouteController.extend({
   waitOn: function () {
+    var streamId;
+    if (Meteor.user()) {
+      streamId = Meteor.user().profile.currentStream;
+    }
+    Meteor.subscribe('messages', streamId);
     Meteor.subscribe('agents');
     Meteor.subscribe('visitors');
-    Meteor.subscribe('messages');
+    Meteor.subscribe('streams');
   },
 
-  data: function () {
+  data: {
+    currentStream: function() {
+      return Meteor.user().profile.currentStream;
+    }
   },
 
   action: function () {

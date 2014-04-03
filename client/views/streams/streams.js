@@ -48,7 +48,7 @@ Template.Streams.helpers({
 });
 
 Template.agentList.helpers({
-  agents: function() {
+  agents: function() {   // not reactive!
     var streamId = this.streamId;
     var users = Meteor.users.find({'roles.permissions': {$in: ['agent']}}).map(function(doc){
       if (doc.profile.fixedStream == streamId) {

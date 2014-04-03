@@ -2,7 +2,7 @@
 /* AgentInput: Style */
 /*****************************************************************************/
 
-#agent-input-message, #agent-input-send {
+#agent-input-message, #agent-input-send, #agent-bookmarks {
     height: 50px;
 }
 
@@ -26,4 +26,9 @@
 
 #agent-input-send {
     width: 100px;
+}
+
+#agent-bookmarks {
+  position:fixed;
+  right: 20px;
 }
