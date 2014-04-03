@@ -2,6 +2,7 @@
   "packages": {
     "iron-router": {},
     "roles": {},
-    "bootstrap-3": {}
+    "bootstrap-3": {},
+    "presence": {}
   }
 }

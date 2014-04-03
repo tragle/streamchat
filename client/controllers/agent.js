@@ -8,6 +8,7 @@ AgentController = RouteController.extend({
     Meteor.subscribe('agents');
     Meteor.subscribe('visitors');
     Meteor.subscribe('streams');
+    Meteor.subscribe('presence');
   },
 
   data: {

@@ -60,16 +60,10 @@ Template.Visitor.helpers({
 
 Deps.autorun(function() {
   var issue = Session.get('issue');
-  console.log('autorun ' + issue);
   if (issue) {
     Meteor.call('getStream', issue, function(error, streamId) {
       if (streamId) {
-        console.log('got a streamId: ' + streamId);
         Session.set('currentStream', streamId);
-      }
-      if (error) {
-        console.log('error');
-        console.log(error);
       }
     });
   }
@@ -78,7 +72,6 @@ Deps.autorun(function() {
 Deps.autorun(function() {
   var currentStream = Session.get('currentStream');
   if (currentStream) {
-    console.log('got a stream: ' + currentStream);
     Meteor.call('joinStream', currentStream); 
     Meteor.subscribe('messages', currentStream); 
   }
