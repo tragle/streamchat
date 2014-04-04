@@ -12,7 +12,7 @@ Template.AgentInput.events({
       message.body = message.body.trim();
       message.stream = Session.get('currentStream'); 
       message.from = agent._id;
-      message.senderName = agent.profile.displayname;
+      message.senderName = agent.profile.displayName;
       if (Session.get('sendTo')) {
         message.to = Session.get('sendTo');
       }
