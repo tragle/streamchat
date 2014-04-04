@@ -20,16 +20,23 @@ Template.AgentChatlog.helpers({
     }
     messageData.observeChanges({
       added: function() {
-        //        scrollToBottom('.agent-chatlog');
+        App.scrollToBottom('#agent-chatlog');
       }
     });
     return messageData;
   },
   previews : function() {
-    return Presences.find(
-      {'state.online': true, 'state.currentStream': Session.get('currentStream'), 'state.typingMessage': {$ne: ''}},
-      {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
-    );
+    if (Session.get('chatFocus')) {
+      return Presences.find(
+        {'state.online': true, 'state.chatFocus': Session.get('chatFocus'), 'state.typingMessage': {$ne: ''}},
+        {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
+      );
+    } else {
+      return Presences.find(
+        {'state.online': true, 'state.currentStream': Session.get('currentStream'), 'state.typingMessage': {$ne: ''}},
+        {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
+      );
+    }
   }
 });
 

@@ -39,6 +39,8 @@ Meteor.methods({
   addVisitor: function(visitor) {
     visitor.password = 'password';
     var id = Accounts.createUser(visitor);
+    Roles.setUserRoles(id, ['visitor'], 'permissions');
+    Roles.setUserRoles(id, [], 'skills');
     return id;
   }
 });

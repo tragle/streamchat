@@ -4,41 +4,42 @@
 App = {};
 
 App.Stream = function() {
-    this.name = '';
-    this.isFixed = false;
-    this.maxPerAgent = 0;
-    this.maxQueue = 0;
+  this.name = '';
+  this.isFixed = false;
+  this.maxPerAgent = 0;
+  this.maxQueue = 0;
 };
 
 App.Message = function() {
-    this.stream = '';
-    this.from = '';
-    this.to = '';
-    this.body = '';
-    this.senderName = '';
-    this.isVisitor = false;
-    this.isDraft = false;
-    this.date = new Date;
+  this.stream = '';
+  this.from = '';
+  this.to = '';
+  this.body = '';
+  this.senderName = '';
+  this.isVisitor = false;
+  this.isDraft = false;
+  this.date = new Date;
+  this.expired = null;
 };
 
 App.User = function() {
-    this.username = '';
-    this.profile = {
-        displayname: '',
-        fixedStream: '',
-    };
+  this.username = '';
+  this.profile = {
+    displayname: '',
+    fixedStream: '',
+  };
 };
 
 App.isAdmin = function(id) {
-    return Roles.userIsInRole(id, ['admin'], 'permissions');
+  return Roles.userIsInRole(id, ['admin'], 'permissions');
 };
 
 App.isAgent = function(id) {
-    return Roles.userIsInRole(id, ['agent'], 'permissions');
+  return Roles.userIsInRole(id, ['agent'], 'permissions');
 };
 
 App.isVisitor = function(id) {
-    return Roles.userIsInRole(id, ['visitor'], 'permissions');
+  return Roles.userIsInRole(id, ['visitor'], 'permissions');
 };
 
 App.checkIsAdmin = function(id) {
@@ -55,5 +56,11 @@ App.flashResult = function(error, id) {
   } else {
     alert(error);
   }
+};
+
+App.scrollToBottom = function(element) {
+  setTimeout(function() {
+    $(element).scrollTop($(element)[0].scrollHeight);},
+    50);
 };
 

@@ -7,3 +7,13 @@
     padding: 10px;
     background: #f5f5f5;
 }
+
+.connection-status {
+  font-size: 8pt;
+}
+
+.stream-status {
+  font-size: 6pt;
+}
+
+

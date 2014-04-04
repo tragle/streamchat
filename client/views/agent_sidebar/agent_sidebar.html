@@ -1,8 +1,9 @@
 <template name="AgentSidebar">
 <div id="agent-sidebar">
-  <div>
-    <div><button id="get-agent-stream" class="btn btn-default">Get Stream</button></div>
-    Current stream: {{currentStream}}
+  <div class="status-indicators">
+    <div class="text-info connection-status">{{connection}}</div> 
+    <div class="text-muted stream-status">stream: {{currentStream}}</div>
+    <hr>
   </div>
 </div>
 </template>

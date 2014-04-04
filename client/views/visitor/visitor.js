@@ -7,15 +7,15 @@ Template.Visitor.events({
     var visitor = new App.User();
     visitor.username = $('#visitor-email').val();
     visitor.email = $('#visitor-email').val();
-    visitor.profile.displayname = $('#visitor-name').val();
+    visitor.profile.displayName = $('#visitor-name').val();
     var issue = $('#visitor-issue').val();
     if (issue) {
       Session.set('issue', issue);
     }
-    Meteor.loginWithPassword(visitor.username, 'password', function(err) {
-      if (err) {
-        Meteor.call('addVisitor', visitor, function(err) {
-          if (!err) {
+    Meteor.loginWithPassword(visitor.username, 'password', function(error) {
+      if (error) {
+        Meteor.call('addVisitor', visitor, function(error) {
+          if (!error) {
             Meteor.loginWithPassword(visitor.username, 'password');
           }
         });
@@ -24,46 +24,56 @@ Template.Visitor.events({
   },
   'click #visitor-logout': function(e) {
     e.preventDefault();
-    Meteor.logout();
+    Meteor.logout(function() {
+      Session.set('currentStream', null);
+      Session.set('issue', null)
+    });
   },
-  'submit .visitor-chat-controls': function(e) {
+  'submit #visitor-chat-controls': function(e) {
     e.preventDefault();
     var message = new App.Message();
     var visitor = Meteor.user();
     message.body = $('#visitor-chat-input').val();
     if (message.body) {
-      message.stream = visitor.profile.currentStream;
+      message.stream = Session.get('currentStream'); 
       message.from = visitor._id;
-      message.senderName = visitor.profile.displayname;
+      message.senderName = visitor.profile.displayName;
       message.isVisitor = true; 
       Meteor.call('sendMessage', message);
       $('#visitor-chat-input').val('');
-      Meteor.call('setTyping', '');
+      Session.set('typingMessage', '');
     }
   },
   'keyup #visitor-chat-input': function(e) {
     if ($('#visitor-chat-input').val()) {
-      Meteor.call('setTyping', $('#visitor-chat-input').val());
+      Session.set('typingMessage', $('#visitor-chat-input').val());
     } else { 
-      Meteor.call('setTyping', '');
+      Session.set('typingMessage', '');
     }
   }
 });
 
-Template.Visitor.helpers({
+Template.visitorChatlog.helpers({
   messages: function() {
+    var messageData;
     var userId = Meteor.userId();
     var streamId = Session.get('currentStream');
-    return Messages.find({$or: [{to: userId}, {from: userId}]});
+    messageData = Messages.find({stream: streamId, $or: [{to: userId}, {from: userId}]});
+    messageData.observeChanges({
+      added: function() {
+        App.scrollToBottom('#visitor-chatlog');
+      }
+    });
+    return messageData;
   }
 });
 
 Deps.autorun(function() {
   var issue = Session.get('issue');
   if (issue) {
-    Meteor.call('getStream', issue, function(error, streamId) {
-      if (streamId) {
-        Session.set('currentStream', streamId);
+    Meteor.call('getStreams', issue, function(error, streams) {
+      if (streams && streams.length) {
+        Session.set('currentStream', streams[0]);
       }
     });
   }
@@ -72,7 +82,6 @@ Deps.autorun(function() {
 Deps.autorun(function() {
   var currentStream = Session.get('currentStream');
   if (currentStream) {
-    Meteor.call('joinStream', currentStream); 
     Meteor.subscribe('messages', currentStream); 
   }
 });

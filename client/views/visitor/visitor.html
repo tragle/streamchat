@@ -1,28 +1,28 @@
 <template name="Visitor">
 <div class="container" id="visitor-chat-ui">
-{{#if currentUser}}
-{{> visitorTools}}
-{{> visitorChatlog}}
-{{> visitorControls}}
-{{else}}
-{{> entrySurvey}}
-{{/if}}
+  {{#if currentUser}}
+  {{> visitorTools}}
+  {{> visitorChatlog}}
+  {{> visitorControls}}
+  {{else}}
+  {{> entrySurvey}}
+  {{/if}}
 </div>
 </template>
 
 <template name="entrySurvey">
 <form role="form" id="visitor-entry-survey">
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Name" id="visitor-name" required>
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Email" id="visitor-email" required>
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Issue" id="visitor-issue">
-    </div>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Name" id="visitor-name" required>
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Email" id="visitor-email" required>
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Issue" id="visitor-issue">
+  </div>
 
-    <button type="submit" class="btn btn-default">Start chatting</button>
+  <button type="submit" class="btn btn-default">Start chatting</button>
 </form> 
 </template>
 
@@ -31,20 +31,20 @@
 </template>
 
 <template name="visitorChatlog">
-<div class="visitor-chatlog">
- <div class="container">
-        {{#each messages}}
-        <div><b>{{senderName}}</b> {{body}}</div>
-        {{/each}}
-    </div>
+<div id="visitor-chatlog">
+  <div>
+    {{#each messages}}
+    <div><b>{{senderName}}</b> {{body}}</div>
+    {{/each}}
+  </div>
 </div>
 </template>
 
 <template name="visitorControls">
-<form class="form-inline visitor-chat-controls" role="form">
-    <div class="form-group">
-        <input type="text" class="form-control" id="visitor-chat-input" placeholder="Message" autofocus>
-    </div>
-    <button type="submit" class="btn btn-default" id="visitor-chat-send">Send</button>
+<form class="form-inline" id="visitor-chat-controls" role="form">
+  <div class="form-group">
+    <input type="text" class="form-control" id="visitor-chat-input" placeholder="Message" autofocus>
+  </div>
+  <button type="submit" class="btn btn-default" id="visitor-chat-send">Send</button>
 </form>
 </template>

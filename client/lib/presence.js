@@ -5,15 +5,19 @@ Presence.state = function() {
     currentStream: Session.get('currentStream'),
     skills: Session.get('skills'),
     typingMessage: Session.get('typingMessage'),
-    sendTo: Session.get('sendTo')
+    chatFocus: Session.get('chatFocus')
   };
 };
 
 Deps.autorun(function() {
   var user = Meteor.user();
   if (user) {
-    Session.set('displayName', user.profile.displayName);
-    Session.set('skills', user.roles.skills);
+    if (user.profile) {
+      Session.set('displayName', user.profile.displayName);
+    }
+    if (user.roles) {
+      Session.set('skills', user.roles.skills);
+    }
   }
 });
 
