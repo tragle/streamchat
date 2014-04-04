@@ -4,11 +4,9 @@
 Template.AgentSidebar.events({
   'click #get-agent-stream': function(e) {
     e.preventDefault();
-    var streamId;
     if (Meteor.user().profile.fixedStream) {
-      streamId = Meteor.user().profile.fixedStream;
+      Session.set('currentStream', Meteor.user().profile.fixedStream);
     }
-    Meteor.call('joinStream', streamId);
   }
 });
 

@@ -20,22 +20,17 @@ Template.AgentChatlog.helpers({
     }
     messageData.observeChanges({
       added: function() {
-//        scrollToBottom('.agent-chatlog');
+        //        scrollToBottom('.agent-chatlog');
       }
     });
     return messageData;
   },
   previews : function() {
-    var previewData;
-    previewData = Meteor.users.find({$and: [{'profile.currentStream': Meteor.user().profile.currentStream}, {'profile.typing': {$ne: ''}}]});
-    previewData.observeChanges({
-      added: function() {
- //       scrollToBottom('.agent-chatlog');
-      }
-    });
-    return previewData;
+    return Presences.find(
+      {'state.online': true, 'state.currentStream': Session.get('currentStream'), 'state.typingMessage': {$ne: ''}},
+      {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
+    );
   }
-
 });
 
 /*****************************************************************************/

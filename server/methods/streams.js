@@ -23,16 +23,20 @@ Meteor.methods({
     return result;
   },
   getStream: function(issue) {
-    console.log('getting stream');
-    var streams = Meteor.users.find({'roles.skills': {$in: [issue]}}).map(function(doc) {
-      console.log('got user:');
-      console.log(doc);
-      return doc.profile.currentStream;
-    }); 
-    console.log('got streams:');
-    console.log(streams);
-    if (streams.length) {
-      return streams[0]._id;
+    // get array of streams where online user has this skill
+    var streams = Presences.find({'state.online': true, 'state.skills': {$in: [issue]}}).map(function(doc) {
+      return doc.state.currentStream;
+    });
+    // sort by the highest occurences of skill 
+    var counts = _.countBy(streams);
+    var sorted = {};
+    if (counts) {
+      for (id in counts) {
+        sorted[counts[id]] = id;
+      }
+      sorted = _.toArray(sorted).reverse();
+      return sorted[0];
     }
+    return ;
   } 
 });

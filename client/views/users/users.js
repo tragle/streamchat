@@ -5,7 +5,7 @@ Template.Users.events({
   'click #add-user': function(e) {
     e.preventDefault();
     var user = new App.User();
-    user.profile.displayname = $('#add-user-name').val();
+    user.profile.displayName = $('#add-user-name').val();
     user.username = $('#add-user-username').val();
     var permissions = $('#add-user-permissions').val().split(' ');
     var skills = $('#add-user-skills').val().split(' ');
@@ -19,11 +19,11 @@ Template.Users.events({
   'click .update-user': function(e) {
     e.preventDefault();
     var button = e.currentTarget;
-    var displayname = $(button).parents('tr').find('input.user-displayname').val();
+    var displayName = $(button).parents('tr').find('input.user-displayname').val();
     var username = $(button).parents('tr').find('input.user-user-username').val();
     var permissions = $(button).parents('tr').find('input.user-permissions').val().split(' ');
     var skills = $(button).parents('tr').find('input.user-skills').val().split(' ');
-    Meteor.call('updateUser', this._id, {'profile.displayname': displayname, username: username}, permissions, skills, App.flashResult);
+    Meteor.call('updateUser', this._id, {'profile.displayName': displayName, username: username}, permissions, skills, App.flashResult);
   }
 });
 

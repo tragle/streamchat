@@ -25,9 +25,7 @@ App.User = function() {
     this.username = '';
     this.profile = {
         displayname: '',
-        currentStream: '',
         fixedStream: '',
-        typing: ''
     };
 };
 

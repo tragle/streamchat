@@ -10,14 +10,14 @@ Template.AgentInput.events({
     message.body = $('#agent-input-message').val();
     if (message.body) {
       message.body = message.body.trim();
-      message.stream = agent.profile.currentStream;
+      message.stream = Session.get('currentStream'); 
       message.from = agent._id;
       message.senderName = agent.profile.displayname;
       if (Session.get('sendTo')) {
         message.to = Session.get('sendTo');
       }
       Meteor.call('sendMessage', message);
-      Meteor.call('setTyping','');
+      Session.set('typingMessage', '');
       $('#agent-input-message').val('');
     }
   },
@@ -29,10 +29,10 @@ Template.AgentInput.events({
       Session.set('chatFocus', Session.get('sendTo'));
     }
     if ($('#agent-input-message').val()) {
-      Meteor.call('setTyping', $('#agent-input-message').val());
+      Session.set('typingMessage', $('#agent-input-message').val());
     } else { 
       Session.set('chatFocus', null);
-      Meteor.call('setTyping', '');
+      Session.set('typingMessage', '');
     }
   }
 });
