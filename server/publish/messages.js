@@ -3,7 +3,6 @@
 /*****************************************************************************/
 
 Meteor.publish('messages', function (streamId) {
-  if (streamId) {
-    return Messages.find({'stream': streamId});
-  }
+  return Messages.find({stream: streamId});
 });
+

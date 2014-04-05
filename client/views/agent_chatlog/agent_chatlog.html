@@ -1,5 +1,6 @@
 <template name="AgentChatlog">
 <div id="agent-chatlog">
+  {{#if currentStream}}
   {{#each messages}}
   <div class="message {{#if expired}}text-muted{{/if}}">
     <span class="sender">{{senderName}}</span> <span class="body">{{body}}</span>
@@ -12,5 +13,8 @@
     {{/with}}
   </div>
   {{/each}}
+  {{else}}
+  <h4>no stream...</h4>
+  {{/if}}
 </div>
 </template>

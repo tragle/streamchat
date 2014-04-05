@@ -5,7 +5,7 @@
 Meteor.methods({
   addStream: function(stream) {
     App.checkIsAdmin(this.userId);
-    console.log('adding stream ' + stream);
+    console.log('adding stream');
     return Streams.insert(stream);
   },
   delStream: function(id) {
@@ -32,12 +32,14 @@ Meteor.methods({
     if (!userId) {
       userId = this.userId;
     }
-    console.log(userId + 'joining stream ' + streamId);
-    var user = Meteor.users.findOne({'_id': userId});
-    var name = user.profile ? user.profile.displayName : 'Somebody';
-    Meteor.call('notifyHere', streamId, name);
-    if (user.roles && 'visitor' in user.roles.permissions) {
-      Meteor.call('notifyWelcome', streamId, name, userId);
+    if (userId && streamId) {
+      console.log(userId + ' joining stream ' + streamId);
+      var user = Meteor.users.findOne({'_id': userId});
+      var name = user.profile ? user.profile.displayName : 'Somebody';
+      Meteor.call('notifyHere', streamId, name);
+      if (user.roles && _.contains(user.roles.permissions, 'visitor')) {
+        Meteor.call('notifyWelcome', streamId, name, userId);
+      }
     }
   },
   leaveStream: function(streamId, userId) {
