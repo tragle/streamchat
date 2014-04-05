@@ -11,6 +11,12 @@ VisitorController = RouteController.extend({
 
   action: function () {
     this.render();
+  },
+
+  onstop: function() {
+    if (Session.get('currentGroup')) {
+      Meteor.call('leaveGroup', Session.get('currentGroup'));
+    }
   }
 });
 

@@ -5,6 +5,8 @@ Template.AgentChatlog.events({
   'click .message': function(e) {
     if (this.isVisitor) {
       Session.set('sendTo', this.from);
+    } else {
+      Session.set('sendTo', '');
     }
   }
 });
