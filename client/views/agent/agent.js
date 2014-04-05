@@ -30,4 +30,5 @@ Template.Agent.rendered = function () {
 };
 
 Template.Agent.destroyed = function () {
+  Meteor.call('leaveStream', Session.get('currentStream'), Meteor.userId());
 };

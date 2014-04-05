@@ -5,7 +5,10 @@
       "iron-router": {},
       "roles": {},
       "bootstrap-3": {},
-      "presence": {}
+      "presence": {
+        "git": "https://github.com/tmeasday/meteor-presence.git",
+        "branch": "master"
+      }
     },
     "packages": {
       "iron-router": {
@@ -24,9 +27,9 @@
         "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
       },
       "presence": {
-        "git": "https://github.com/dburles/meteor-presence.git",
-        "tag": "v0.4.3",
-        "commit": "8bfcae844195ff5681a123cb4302af9e719663ac"
+        "git": "https://github.com/tmeasday/meteor-presence.git",
+        "branch": "master",
+        "commit": "b711203b3e66df2b7737175cc0ff3e42f70df923"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

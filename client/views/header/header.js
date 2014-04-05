@@ -3,10 +3,8 @@
 /*****************************************************************************/
 Template.Header.events({
   'click #logout': function() {
-    Meteor.logout(function() {
-      Session.set('currentStream', null);
-      Session.set('chatFocus', null);
-    });
+    Meteor.call('leaveStream', Session.get('currentStream'), Meteor.userId());
+    Meteor.logout();
   }
 });
 

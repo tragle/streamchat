@@ -30,12 +30,6 @@ Meteor.methods({
     }
     return id;
   },
-  setTyping: function(message) {
-    return Meteor.users.update({'_id': this.userId}, {$set: {'profile.typing': message}});
-  },
-  joinStream: function(streamId) {
-    return Meteor.users.update({'_id': this.userId}, {$set: {'profile.currentStream': streamId}});
-  },
   addVisitor: function(visitor) {
     visitor.password = 'password';
     var id = Accounts.createUser(visitor);

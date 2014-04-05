@@ -28,16 +28,40 @@ Meteor.methods({
     var result = Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedStream': streamId}}, {multi:true});
     return result;
   },
+  joinStream: function(streamId, userId) {
+    if (!userId) {
+      userId = this.userId;
+    }
+    console.log(userId + 'joining stream ' + streamId);
+    var user = Meteor.users.findOne({'_id': userId});
+    var name = user.profile ? user.profile.displayName : 'Somebody';
+    Meteor.call('notifyHere', streamId, name);
+    if (user.roles && 'visitor' in user.roles.permissions) {
+      Meteor.call('notifyWelcome', streamId, name, userId);
+    }
+  },
+  leaveStream: function(streamId, userId) {
+    if (!userId) {
+      userId = this.userId;
+    }
+    if (userId && streamId) {
+      console.log(userId + ' leaving stream ' + streamId);
+      var user = Meteor.users.findOne({'_id': userId});
+      var name = user.profile ? user.profile.displayName : 'Somebody';
+      Meteor.call('notifyGone', streamId, name);
+      Meteor.call('expireMessages', userId);
+    }
+  },
   getStreams: function(skill) {
     console.log('getting streams for ' + skill);
     var points;
     function skillPoints(skill) {
       if (skill) {
         // get array of streams where online user has this skill
-        var streams = Presences.find({'state.online': true, 'state.skills': {$in: [skill]}}).map(function(doc) {
+        var streams = Meteor.presences.find({'state.online': true, 'state.skills': {$in: [skill]}}).map(function(doc) {
           return doc.state.currentStream;
         });
-        // consolidate by number of users with skill 
+        // get the number of users with that skill in each 
         var counts = _.countBy(streams);
         return counts; 
       }

@@ -3,11 +3,11 @@
 /*****************************************************************************/
 
 Meteor.methods({
- /*
-  * Example:
-  *  '/app/streams/update/email': function (email) {
-  *    Users.update({_id: this.userId}, {$set: {'profile.email': email}});
-  *  }
-  *
-  */
+  joinStream: function(streamId) {
+    Session.set('currentStream', streamId);
+  },
+  leaveStream: function() {
+      Session.set('currentStream', null);
+      Session.set('chatFocus', null);
+  }
 });

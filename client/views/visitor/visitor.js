@@ -24,10 +24,8 @@ Template.Visitor.events({
   },
   'click #visitor-logout': function(e) {
     e.preventDefault();
-    Meteor.logout(function() {
-      Session.set('currentStream', null);
-      Session.set('issue', null)
-    });
+    Meteor.call('leaveStream', Session.get('currentStream'), Meteor.userId());
+    Meteor.logout();
   },
   'submit #visitor-chat-controls': function(e) {
     e.preventDefault();
@@ -70,10 +68,10 @@ Template.visitorChatlog.helpers({
 
 Deps.autorun(function() {
   var issue = Session.get('issue');
-  if (issue) {
+  if (Meteor.user() && issue) {
     Meteor.call('getStreams', issue, function(error, streams) {
       if (streams && streams.length) {
-        Session.set('currentStream', streams[0]);
+        Meteor.call('joinStream', streams[0]);
       }
     });
   }
@@ -97,3 +95,6 @@ Template.Visitor.rendered = function () {
 
 Template.Visitor.destroyed = function () {
 };
+
+Template.visitorChatlog.destroyed = function () {
+};;

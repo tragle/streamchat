@@ -1,5 +1,6 @@
 VisitorController = RouteController.extend({
   waitOn: function () {
+    Meteor.logout();
     Meteor.subscribe('presence');
   },
 

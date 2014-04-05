@@ -1,7 +1,7 @@
 <template name="AgentChatlog">
 <div id="agent-chatlog">
   {{#each messages}}
-  <div class="message">
+  <div class="message {{#if expired}}text-muted{{/if}}">
     <span class="sender">{{senderName}}</span> <span class="body">{{body}}</span>
   </div>
   {{/each}}

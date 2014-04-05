@@ -1,9 +1,9 @@
-Presence.state = function() {
+Meteor.Presence.state = function() {
   return {
     online: true,
-    displayName: Session.get('displayName'),
+    displayName: Meteor.user() ? Meteor.user().profile.displayName : null,
+    skills: Meteor.user() ? Meteor.user().roles.skills: null,
     currentStream: Session.get('currentStream'),
-    skills: Session.get('skills'),
     typingMessage: Session.get('typingMessage'),
     chatFocus: Session.get('chatFocus')
   };

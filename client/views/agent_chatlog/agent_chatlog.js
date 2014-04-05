@@ -26,17 +26,24 @@ Template.AgentChatlog.helpers({
     return messageData;
   },
   previews : function() {
+    var previewData;
     if (Session.get('chatFocus')) {
-      return Presences.find(
+      previewData = Meteor.presences.find(
         {'state.online': true, 'state.chatFocus': Session.get('chatFocus'), 'state.typingMessage': {$ne: ''}},
         {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
       );
     } else {
-      return Presences.find(
+      previewData = Meteor.presences.find(
         {'state.online': true, 'state.currentStream': Session.get('currentStream'), 'state.typingMessage': {$ne: ''}},
         {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
       );
     }
+    previewData.observeChanges({
+      added: function() {
+        App.scrollToBottom('#agent-chatlog');
+      }
+    });
+    return previewData;
   }
 });
 

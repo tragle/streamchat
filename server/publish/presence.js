@@ -3,13 +3,13 @@
 /*****************************************************************************/
 
 Meteor.publish('presence', function () {
-  return Presences.find();
+  return Meteor.presences.find();
 });
 
 Meteor.publish('usersInStream', function(streamId) {
-  return Presences.find({online: true, currentStream: streamId});
+  return Meteor.presences.find({online: true, currentStream: streamId});
 });
 
 Meteor.publish('usersBySkill', function(skill) {
-  return Presences.find({online: true, skills: {$in: [skill]}});
+  return Meteor.presences.find({online: true, skills: {$in: [skill]}});
 });
