@@ -1,39 +1,39 @@
-<template name="Streams">
+<template name="Groups">
 <div class="panel panel-default">
-  <div class="panel-heading">add streams</div>
-  <table class="table" id="add-stream">
+  <div class="panel-heading">add groups</div>
+  <table class="table" id="add-group">
     <thead>
       <tr><td>Name</td><td>Max per agent</td><td>Max queue</td><td>Agents</td><td></td><td></td></tr>
     </thead>
     <tbody>
-      {{#each streams}}
+      {{#each groups}}
       <tr id="{{_id}}">
-        <td><input type="text" class="form-control stream-name" value="{{name}}"></td>
-        <td><input type="number" class="form-control stream-max-per-agent" value="{{maxPerAgent}}"></td>
-        <td><input type="number" class="form-control stream-max-queue" value="{{maxQueue}}"></td>
+        <td><input type="text" class="form-control group-name" value="{{name}}"></td>
+        <td><input type="number" class="form-control group-max-per-agent" value="{{maxPerAgent}}"></td>
+        <td><input type="number" class="form-control group-max-queue" value="{{maxQueue}}"></td>
         <td><div class="dropdown">
             <span class="form-control dropdown-toggle unselectable" data-toggle="dropdown">Fixed agents <span class="caret"></span></span>
-            <ul class="dropdown-menu stream-agent-picker" role="menu">
-              {{> agentList streamId=this._id}}
+            <ul class="dropdown-menu group-agent-picker" role="menu">
+              {{> agentList groupId=this._id}}
             </ul>
           </div>
         </td>
-        <td><button class="btn update-stream">Update</button></td>
-        <td><button class="btn delete-stream">Delete</button></td>
+        <td><button class="btn update-group">Update</button></td>
+        <td><button class="btn delete-group">Delete</button></td>
       </tr>
       {{/each}}
       <tr>
-        <td><input id="add-stream-name" type="text" class="form-control" placeholder="Name" required></td>
-        <td><input id="add-stream-max-per-agent" type="number" class="form-control" placeholder="Max visitors per agent"></td>
-        <td><input id="add-stream-max-queue" type="text" class="form-control" placeholder="Max visitors in queue"></td>
+        <td><input id="add-group-name" type="text" class="form-control" placeholder="Name" required></td>
+        <td><input id="add-group-max-per-agent" type="number" class="form-control" placeholder="Max visitors per agent"></td>
+        <td><input id="add-group-max-queue" type="text" class="form-control" placeholder="Max visitors in queue"></td>
         <td><div class="dropdown">
             <span class="form-control dropdown-toggle unselectable" data-toggle="dropdown">Fixed agents <span class="caret"></span></span>
-            <ul class="dropdown-menu add-stream-agent-picker" role="menu">
+            <ul class="dropdown-menu add-group-agent-picker" role="menu">
               {{> agentList}}
             </ul>
           </div>
         </td>
-        <td><button type="submit" id="add-stream-button" class="btn">Add</button></td>
+        <td><button type="submit" id="add-group-button" class="btn">Add</button></td>
       </tr>
     </tbody>
   </table>

@@ -1,57 +1,57 @@
 /*****************************************************************************/
-/* Streams: Event Handlers and Helpers */
+/* Groups: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.Streams.events({
-  'click #add-stream-button': function(e) {
+Template.Groups.events({
+  'click #add-group-button': function(e) {
     e.preventDefault();
-    var stream = new App.Stream();
+    var group = new App.Group();
     var agentIds = [];
-    stream.name = $('#add-stream-name').val();
-    stream.maxPerAgent = $('#add-stream-max-per-agent').val() || null;
-    stream.maxQueue = $('#add-stream-max-queue').val() || null;
-    $('.add-stream-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
-    stream.isFixed = true;
-    $('input[id^="add-stream"]').val('');
-    Meteor.call('addStream', stream, function(error, streamId) {
-      if (streamId && agentIds.length) {
-        Meteor.call('addFixedUsers', streamId, agentIds);
+    group.name = $('#add-group-name').val();
+    group.maxPerAgent = $('#add-group-max-per-agent').val() || null;
+    group.maxQueue = $('#add-group-max-queue').val() || null;
+    $('.add-group-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
+    group.isFixed = true;
+    $('input[id^="add-group"]').val('');
+    Meteor.call('addGroup', group, function(error, groupId) {
+      if (groupId && agentIds.length) {
+        Meteor.call('addFixedUsers', groupId, agentIds);
       }
-      App.flashResult(error, streamId);
+      App.flashResult(error, groupId);
     }); 
   },
-  'click .delete-stream':function(e) {
+  'click .delete-group':function(e) {
     e.preventDefault();
-    Meteor.call('delStream', this._id);
+    Meteor.call('delGroup', this._id);
   },
-  'click .update-stream':function(e) {
+  'click .update-group':function(e) {
     e.preventDefault();
     var agentIds = [];
     var button = e.currentTarget;
-    var name = $(button).parents('tr').find('input.stream-name').val();
-    var maxPerAgent = $(button).parents('tr').find('input.stream-max-per-agent').val();
-    var maxQueue = $(button).parents('tr').find('input.stream-max-agents').val();
-    $('.stream-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
-    Meteor.call('updateStream',this._id, {name: name, maxPerAgent: maxPerAgent, maxQueue: maxQueue}, App.flashResult);
+    var name = $(button).parents('tr').find('input.group-name').val();
+    var maxPerAgent = $(button).parents('tr').find('input.group-max-per-agent').val();
+    var maxQueue = $(button).parents('tr').find('input.group-max-agents').val();
+    $('.group-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
+    Meteor.call('updateGroup',this._id, {name: name, maxPerAgent: maxPerAgent, maxQueue: maxQueue}, App.flashResult);
     if (agentIds.length) {
       Meteor.call('addFixedUsers', this._id, agentIds);
     }
   },
-  'click .stream-agent-picker li, click .add-stream-agent-picker li': function(e) {
+  'click .group-agent-picker li, click .add-group-agent-picker li': function(e) {
     e.stopPropagation();
   }
 });
 
-Template.Streams.helpers({
-  streams: function() {
-    return Streams.find();
+Template.Groups.helpers({
+  groups: function() {
+    return Groups.find();
   }
 });
 
 Template.agentList.helpers({
   agents: function() {   // not reactive!
-    var streamId = this.streamId;
+    var groupId = this.groupId;
     var users = Meteor.users.find({'roles.permissions': {$in: ['agent']}}).map(function(doc){
-      if (doc.profile.fixedStream == streamId) {
+      if (doc.profile.fixedGroup == groupId) {
         doc.assigned = true;
       }
       return doc;
@@ -61,13 +61,13 @@ Template.agentList.helpers({
 });
 
 /*****************************************************************************/
-/* Streams: Lifecycle Hooks */
+/* Groups: Lifecycle Hooks */
 /*****************************************************************************/
-Template.Streams.created = function () {
+Template.Groups.created = function () {
 };
 
-Template.Streams.rendered = function () {
+Template.Groups.rendered = function () {
 };
 
-Template.Streams.destroyed = function () {
+Template.Groups.destroyed = function () {
 };

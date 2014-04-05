@@ -1,6 +1,6 @@
 <template name="AgentChatlog">
 <div id="agent-chatlog">
-  {{#if currentStream}}
+  {{#if currentGroup}}
   {{#each messages}}
   <div class="message {{#if expired}}text-muted{{/if}}">
     <span class="sender">{{senderName}}</span> <span class="body">{{body}}</span>
@@ -14,7 +14,7 @@
   </div>
   {{/each}}
   {{else}}
-  <h4>no stream...</h4>
+  <h4>no group...</h4>
   {{/if}}
 </div>
 </template>

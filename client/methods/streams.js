@@ -1,13 +1,13 @@
 /*****************************************************************************/
-/* Streams Methods */
+/* Groups Methods */
 /*****************************************************************************/
 
 Meteor.methods({
-  joinStream: function(streamId) {
-    Session.set('currentStream', streamId);
+  joinGroup: function(groupId) {
+    Session.set('currentGroup', groupId);
   },
-  leaveStream: function() {
-      Session.set('currentStream', null);
+  leaveGroup: function() {
+      Session.set('currentGroup', null);
       Session.set('chatFocus', null);
   }
 });

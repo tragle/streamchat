@@ -1,9 +1,9 @@
 Meteor.presences.find().observe({
   removed: function(oldUser) {
-    if (oldUser.userId && oldUser.state && oldUser.state.currentStream) {
+    if (oldUser.userId && oldUser.state && oldUser.state.currentGroup) {
       if (!Meteor.presences.findOne({'userId':oldUser.userId})) {
         console.log(oldUser.userId + ' timed out.');
-        Meteor.call('leaveStream', oldUser.state.currentStream, oldUser.userId);
+        Meteor.call('leaveGroup', oldUser.state.currentGroup, oldUser.userId);
       }
     }
   }

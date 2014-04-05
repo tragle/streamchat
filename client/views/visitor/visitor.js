@@ -24,7 +24,7 @@ Template.Visitor.events({
   },
   'click #visitor-logout': function(e) {
     e.preventDefault();
-    Meteor.call('leaveStream', Session.get('currentStream'), Meteor.userId());
+    Meteor.call('leaveGroup', Session.get('currentGroup'), Meteor.userId());
     Meteor.logout();
   },
   'submit #visitor-chat-controls': function(e) {
@@ -33,7 +33,7 @@ Template.Visitor.events({
     var visitor = Meteor.user();
     message.body = $('#visitor-chat-input').val();
     if (message.body) {
-      message.stream = Session.get('currentStream'); 
+      message.group = Session.get('currentGroup'); 
       message.from = visitor._id;
       message.senderName = visitor.profile.displayName;
       message.isVisitor = true; 
@@ -55,8 +55,8 @@ Template.visitorChatlog.helpers({
   messages: function() {
     var messageData;
     var userId = Meteor.userId();
-    var streamId = Session.get('currentStream');
-    messageData = Messages.find({stream: streamId, $or: [{to: userId}, {from: userId}]});
+    var groupId = Session.get('currentGroup');
+    messageData = Messages.find({group: groupId, $or: [{to: userId}, {from: userId}]});
     messageData.observeChanges({
       added: function() {
         App.scrollToBottom('#visitor-chatlog');
@@ -69,18 +69,18 @@ Template.visitorChatlog.helpers({
 Deps.autorun(function() {
   var issue = Session.get('issue');
   if (Meteor.user() && issue) {
-    Meteor.call('getStreams', issue, function(error, streams) {
-      if (streams && streams.length) {
-        Meteor.call('joinStream', streams[0]);
+    Meteor.call('getGroups', issue, function(error, groups) {
+      if (groups && groups.length) {
+        Meteor.call('joinGroup', groups[0]);
       }
     });
   }
 });
 
 Deps.autorun(function() {
-  var currentStream = Session.get('currentStream');
-  if (currentStream) {
-    Meteor.subscribe('messages', currentStream); 
+  var currentGroup = Session.get('currentGroup');
+  if (currentGroup) {
+    Meteor.subscribe('messages', currentGroup); 
   }
 });
 

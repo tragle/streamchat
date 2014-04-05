@@ -3,7 +3,7 @@
 /*****************************************************************************/
 App = {};
 
-App.Stream = function() {
+App.Group = function() {
   this.name = '';
   this.isFixed = false;
   this.maxPerAgent = 0;
@@ -11,7 +11,7 @@ App.Stream = function() {
 };
 
 App.Message = function() {
-  this.stream = '';
+  this.group = '';
   this.from = '';
   this.to = '';
   this.body = '';
@@ -26,7 +26,7 @@ App.User = function() {
   this.username = '';
   this.profile = {
     displayname: '',
-    fixedStream: '',
+    fixedGroup: '',
   };
 };
 

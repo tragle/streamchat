@@ -1,1 +1,1 @@
-Streams = new Meteor.Collection('streams');
+Groups = new Meteor.Collection('groups');

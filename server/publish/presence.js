@@ -6,8 +6,8 @@ Meteor.publish('presence', function () {
   return Meteor.presences.find();
 });
 
-Meteor.publish('usersInStream', function(streamId) {
-  return Meteor.presences.find({online: true, currentStream: streamId});
+Meteor.publish('usersInGroup', function(groupId) {
+  return Meteor.presences.find({online: true, currentGroup: groupId});
 });
 
 Meteor.publish('usersBySkill', function(skill) {

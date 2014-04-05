@@ -1,8 +1,8 @@
 /*****************************************************************************/
-/* Streams Publish Functions
+/* Groups Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('streams', function () {
-  return Streams.find();
+Meteor.publish('groups', function () {
+  return Groups.find();
 });
 

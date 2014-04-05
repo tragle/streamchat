@@ -1,16 +1,16 @@
 AgentController = RouteController.extend({
   waitOn: function () {
-    if (Meteor.user() && Meteor.user().profile.fixedStream) {
-    //  Session.set('currentStream', Meteor.user().profile.fixedStream);
-      Meteor.call('joinStream', Meteor.user().profile.fixedStream);
+    if (Meteor.user() && Meteor.user().profile.fixedGroup) {
+    //  Session.set('currentGroup', Meteor.user().profile.fixedGroup);
+      Meteor.call('joinGroup', Meteor.user().profile.fixedGroup);
     }
-    Meteor.subscribe('messages', Session.get('currentStream'));
+    Meteor.subscribe('messages', Session.get('currentGroup'));
     Meteor.subscribe('presence');
   },
 
   data: {
-    currentStream: function() {
-      return Session.get('currentStream'); 
+    currentGroup: function() {
+      return Session.get('currentGroup'); 
     }
   },
 

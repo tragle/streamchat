@@ -1,83 +1,83 @@
 /*****************************************************************************/
-/* Streams Methods */
+/* Groups Methods */
 /*****************************************************************************/
 
 Meteor.methods({
-  addStream: function(stream) {
+  addGroup: function(group) {
     App.checkIsAdmin(this.userId);
-    console.log('adding stream');
-    return Streams.insert(stream);
+    console.log('adding group');
+    return Groups.insert(group);
   },
-  delStream: function(id) {
+  delGroup: function(id) {
     App.checkIsAdmin(this.userId);
-    console.log('deleting stream ' + id);
-    Meteor.users.update({'profile.fixedStream':id}, {$set: {'profile.fixedStream': null}}, {multi:true});
-    return Streams.remove({'_id':id});
+    console.log('deleting group ' + id);
+    Meteor.users.update({'profile.fixedGroup':id}, {$set: {'profile.fixedGroup': null}}, {multi:true});
+    return Groups.remove({'_id':id});
   },
-  updateStream: function(id, options) {
+  updateGroup: function(id, options) {
     App.checkIsAdmin(this.userId);
-    console.log('updating stream ' + id);
+    console.log('updating group ' + id);
     console.log(options);
-    Streams.update({'_id':id},{$set: options});
+    Groups.update({'_id':id},{$set: options});
     return id;
   },
-  addFixedUsers: function(streamId, userIds) {
+  addFixedUsers: function(groupId, userIds) {
     App.checkIsAdmin(this.userId);
-    console.log('adding fixed users to stream ' + streamId);
+    console.log('adding fixed users to group ' + groupId);
     console.log(userIds);
-    var result = Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedStream': streamId}}, {multi:true});
+    var result = Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedGroup': groupId}}, {multi:true});
     return result;
   },
-  joinStream: function(streamId, userId) {
+  joinGroup: function(groupId, userId) {
     if (!userId) {
       userId = this.userId;
     }
-    if (userId && streamId) {
-      console.log(userId + ' joining stream ' + streamId);
+    if (userId && groupId) {
+      console.log(userId + ' joining group ' + groupId);
       var user = Meteor.users.findOne({'_id': userId});
       var name = user.profile ? user.profile.displayName : 'Somebody';
-      Meteor.call('notifyHere', streamId, name);
+      Meteor.call('notifyHere', groupId, name);
       if (user.roles && _.contains(user.roles.permissions, 'visitor')) {
-        Meteor.call('notifyWelcome', streamId, name, userId);
+        Meteor.call('notifyWelcome', groupId, name, userId);
       }
     }
   },
-  leaveStream: function(streamId, userId) {
+  leaveGroup: function(groupId, userId) {
     if (!userId) {
       userId = this.userId;
     }
-    if (userId && streamId) {
-      console.log(userId + ' leaving stream ' + streamId);
+    if (userId && groupId) {
+      console.log(userId + ' leaving group ' + groupId);
       var user = Meteor.users.findOne({'_id': userId});
       var name = user.profile ? user.profile.displayName : 'Somebody';
-      Meteor.call('notifyGone', streamId, name);
+      Meteor.call('notifyGone', groupId, name);
       Meteor.call('expireMessages', userId);
     }
   },
-  getStreams: function(skill) {
-    console.log('getting streams for ' + skill);
+  getGroups: function(skill) {
+    console.log('getting groups for ' + skill);
     var points;
     function skillPoints(skill) {
       if (skill) {
-        // get array of streams where online user has this skill
-        var streams = Meteor.presences.find({'state.online': true, 'state.skills': {$in: [skill]}}).map(function(doc) {
-          return doc.state.currentStream;
+        // get array of groups where online user has this skill
+        var groups = Meteor.presences.find({'state.online': true, 'state.skills': {$in: [skill]}}).map(function(doc) {
+          return doc.state.currentGroup;
         });
         // get the number of users with that skill in each 
-        var counts = _.countBy(streams);
+        var counts = _.countBy(groups);
         return counts; 
       }
     };
     points = skillPoints(skill);
     // sort by points
-    var sortedStreams= {};
+    var sortedGroups= {};
     if (points) {
       for (id in points) {
-        sortedStreams[points[id]] = id;
+        sortedGroups[points[id]] = id;
       }
-      sortedStreams= _.toArray(sortedStreams).reverse();
-      console.log(sortedStreams);
-      return sortedStreams;
+      sortedGroups= _.toArray(sortedGroups).reverse();
+      console.log(sortedGroups);
+      return sortedGroups;
     }
   }
 });

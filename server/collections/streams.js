@@ -1,11 +1,11 @@
 /*
  * Add query methods like this:
- *  Streams.findPublic = function () {
- *    return Streams.find({is_public: true});
+ *  Groups.findPublic = function () {
+ *    return Groups.find({is_public: true});
  *  }
  */
 
-Streams.allow({
+Groups.allow({
   insert: function (userId, doc) {
     return true;
   },
@@ -19,7 +19,7 @@ Streams.allow({
   }
 });
 
-Streams.deny({
+Groups.deny({
   insert: function (userId, doc) {
     return false;
   },

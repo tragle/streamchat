@@ -3,7 +3,7 @@ Meteor.Presence.state = function() {
     online: true,
     displayName: Meteor.user() ? Meteor.user().profile.displayName : null,
     skills: Meteor.user() ? Meteor.user().roles.skills: null,
-    currentStream: Session.get('currentStream'),
+    currentGroup: Session.get('currentGroup'),
     typingMessage: Session.get('typingMessage'),
     chatFocus: Session.get('chatFocus')
   };

@@ -1,6 +1,6 @@
-StreamsController = RouteController.extend({
+GroupsController = RouteController.extend({
   waitOn: function () {
-    return [Meteor.subscribe('streams'), Meteor.subscribe('agents')];
+    return [Meteor.subscribe('groups'), Meteor.subscribe('agents')];
   },
 
   data: function () {

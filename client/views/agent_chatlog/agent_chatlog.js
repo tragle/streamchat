@@ -34,7 +34,7 @@ Template.AgentChatlog.helpers({
       );
     } else {
       previewData = Meteor.presences.find(
-        {'state.online': true, 'state.currentStream': Session.get('currentStream'), 'state.typingMessage': {$ne: ''}},
+        {'state.online': true, 'state.currentGroup': Session.get('currentGroup'), 'state.typingMessage': {$ne: ''}},
         {$fields: {'state.displayName': 1, 'state.typingMessage': 1}}
       );
     }

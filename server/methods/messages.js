@@ -6,26 +6,26 @@ Meteor.methods({
   sendMessage: function(message) {
     return Messages.insert(message);
   },
-  sendSystemMessage: function(streamId, body, type, to) {
+  sendSystemMessage: function(groupId, body, type, to) {
     var message = new App.Message();
     message.senderName = 'System';
-    message.stream = streamId;
+    message.group = groupId;
     message.body = body;
     message.to = to || '';
     message.type = type || '';
     Meteor.call('sendMessage', message);
   },
-  notifyGone: function(streamId, name, to) {
+  notifyGone: function(groupId, name, to) {
     var body = name + ' is gone.';
-    Meteor.call('sendSystemMessage', streamId, body, 'gone', to);
+    Meteor.call('sendSystemMessage', groupId, body, 'gone', to);
   },
-  notifyHere: function(streamId, name, to) {
+  notifyHere: function(groupId, name, to) {
     var body = name + ' is here.';
-    Meteor.call('sendSystemMessage', streamId, body, 'here', to);
+    Meteor.call('sendSystemMessage', groupId, body, 'here', to);
   },
-  notifyWelcome: function(streamId, name, to) {
+  notifyWelcome: function(groupId, name, to) {
     var body = 'Welcome, ' + name + '!';
-    Meteor.call('sendSystemMessage', streamId, body, 'welcome', to);
+    Meteor.call('sendSystemMessage', groupId, body, 'welcome', to);
   },
   expireMessages: function(userId) {
     if (userId) {

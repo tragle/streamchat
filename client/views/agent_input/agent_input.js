@@ -10,7 +10,7 @@ Template.AgentInput.events({
     message.body = $('#agent-input-message').val();
     if (message.body) {
       message.body = message.body.trim();
-      message.stream = Session.get('currentStream'); 
+      message.group = Session.get('currentGroup'); 
       message.from = agent._id;
       message.senderName = agent.profile.displayName;
       if (Session.get('sendTo')) {
