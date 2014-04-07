@@ -11,11 +11,10 @@
   </div>
   <div>
     {{#each groupVisitors}}
-    <div class="visitor-channel-container {{#if
-      activated}}activated{{/if}}">
-    <div class="visitor-channel alert {{#if
+     <div class="visitor-channel alert {{#if
       state.waitingSince}}alert-warning{{else}}alert-success{{/if}} {{#unless
-      state.responder}}alert-danger{{/unless}}">
+      state.responder}}alert-danger{{/unless}} {{#if
+   activated}}activated{{/if}}">
       <div class="visitor-channel-name">{{this.state.displayName}}</div>
       <div>
         <span class="responder-name">
@@ -28,9 +27,8 @@
           <span class="visitor-solo {{#if isSolo}}bg-primary{{else}}bg-white{{/if}}">S</span>
         </span>
       </div>
-    </div>
   </div>
     {{/each}}
-  </div>
+      </div> 
 </div>
 </template>
