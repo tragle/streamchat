@@ -16,6 +16,7 @@ App.Message = function() {
   this.to = '';
   this.body = '';
   this.senderName = '';
+  this.recipientName = '';
   this.isVisitor = false;
   this.isDraft = false;
   this.date = new Date;

@@ -1,7 +1,7 @@
 VisitorController = RouteController.extend({
   waitOn: function () {
-    Meteor.logout();
     Meteor.subscribe('presence');
+    Session.set('isVisitor', true);
   },
 
   layoutTemplate: 'Visitor',
@@ -13,7 +13,7 @@ VisitorController = RouteController.extend({
     this.render();
   },
 
-  onstop: function() {
+  onStop: function() {
     if (Session.get('currentGroup')) {
       Meteor.call('leaveGroup', Session.get('currentGroup'));
     }

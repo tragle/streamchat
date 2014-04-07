@@ -2,7 +2,7 @@
 /* Visitor: Style */
 /*****************************************************************************/
 
-#visitor-chat-ui {
+#visitor-chat-ui, #visitor-entry-ui {
   width: 440px;
   padding: 20px;
   border: 2px solid #bbb;

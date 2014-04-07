@@ -11,13 +11,6 @@ Template.Agent.events({
 });
 
 Template.Agent.helpers({
-
-  /*
-   * Example: 
-   *  items: function () {
-   *    return Items.find();
-   *  }
-   */
 });
 
 /*****************************************************************************/

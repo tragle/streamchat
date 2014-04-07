@@ -5,7 +5,11 @@ Meteor.Presence.state = function() {
     skills: Meteor.user() ? Meteor.user().roles.skills: null,
     currentGroup: Session.get('currentGroup'),
     typingMessage: Session.get('typingMessage'),
-    chatFocus: Session.get('chatFocus')
+    chatFocus: Session.get('chatFocus'),
+    chatFocusName: Session.get('chatFocusName'),
+    waitingSince: Session.get('waitingSince'),
+    isVisitor: Session.get('isVisitor'),
+    responder: Session.get('lastResponseFrom')
   };
 };
 

@@ -2,16 +2,23 @@
 <div id="agent-chatlog">
   {{#if currentGroup}}
   {{#each messages}}
-  <div class="message {{#if expired}}text-muted{{/if}}">
-    <span class="sender">{{senderName}}</span> <span class="body">{{body}}</span>
+  <div class="message {{#if expired}}text-info{{/if}}">
+    <span class="sender">{{senderName}} {{#if recipientName}}
+    > {{recipientName}} 
+    {{/if}}  
+  </span>
+    <span class="body">{{body}}</span>
   </div>
   {{/each}}
   {{#each previews}}
+  {{#with state}}
+  {{#if typingMessage}}
   <div class="message text-muted">
-    {{#with state}}
-    <span class="sender">{{displayName}}</span> <span class="body">{{typingMessage}}</span>
-    {{/with}}
+    <span class="sender">{{displayName}} {{#if chatFocusName}} >
+    {{chatFocusName}} {{/if}}</span> <span class="body">{{typingMessage}}</span>
   </div>
+  {{/if}}
+  {{/with}}
   {{/each}}
   {{else}}
   <h4>no group...</h4>

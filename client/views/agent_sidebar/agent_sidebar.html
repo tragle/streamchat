@@ -3,7 +3,34 @@
   <div class="status-indicators">
     <div class="text-info connection-status">{{connection}}</div> 
     <div class="text-muted group-status">group: {{currentGroup}}</div>
-    <hr>
+  </div>
+  <div class="agent-list panel panel-primary">
+    {{#each groupAgents}}
+    <span class="label label-primary">{{state.displayName}}</span> 
+    {{/each}}
+  </div>
+  <div>
+    {{#each groupVisitors}}
+    <div class="visitor-channel-container {{#if
+      activated}}activated{{/if}}">
+    <div class="visitor-channel alert {{#if
+      state.waitingSince}}alert-warning{{else}}alert-success{{/if}} {{#unless
+      state.responder}}alert-danger{{/unless}}">
+      <div class="visitor-channel-name">{{this.state.displayName}}</div>
+      <div>
+        <span class="responder-name">
+          {{#if state.responder}}
+          <span class="label label-primary">{{state.responder}}</span>
+          {{/if}}
+        </span>
+        <span class="visitor-visibility pull-right">
+          <span class="visitor-mute {{#if isMute}}bg-primary{{else}}bg-white{{/if}}">M</span> 
+          <span class="visitor-solo {{#if isSolo}}bg-primary{{else}}bg-white{{/if}}">S</span>
+        </span>
+      </div>
+    </div>
+  </div>
+    {{/each}}
   </div>
 </div>
 </template>

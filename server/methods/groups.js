@@ -51,7 +51,9 @@ Meteor.methods({
       var user = Meteor.users.findOne({'_id': userId});
       var name = user.profile ? user.profile.displayName : 'Somebody';
       Meteor.call('notifyGone', groupId, name);
-      Meteor.call('expireMessages', userId);
+      if (App.isVisitor(this.userId)) {
+        Meteor.call('expireMessages', userId);
+      }
     }
   },
   getGroups: function(skill) {

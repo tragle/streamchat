@@ -2,30 +2,13 @@
 /* Visitor: Event Handlers and Helpers */
 /*****************************************************************************/
 Template.Visitor.events({
-  'submit #visitor-entry-survey': function(e) {
-    e.preventDefault();
-    var visitor = new App.User();
-    visitor.username = $('#visitor-email').val();
-    visitor.email = $('#visitor-email').val();
-    visitor.profile.displayName = $('#visitor-name').val();
-    var issue = $('#visitor-issue').val();
-    if (issue) {
-      Session.set('issue', issue);
-    }
-    Meteor.loginWithPassword(visitor.username, 'password', function(error) {
-      if (error) {
-        Meteor.call('addVisitor', visitor, function(error) {
-          if (!error) {
-            Meteor.loginWithPassword(visitor.username, 'password');
-          }
-        });
-      } 
-    });
-  },
   'click #visitor-logout': function(e) {
     e.preventDefault();
     Meteor.call('leaveGroup', Session.get('currentGroup'), Meteor.userId());
+    Session.set('waitingSince', '');
+    Session.set('lastResponseFrom', '');
     Meteor.logout();
+    Router.go('visitor.entry');
   },
   'submit #visitor-chat-controls': function(e) {
     e.preventDefault();
@@ -38,6 +21,7 @@ Template.Visitor.events({
       message.senderName = visitor.profile.displayName;
       message.isVisitor = true; 
       Meteor.call('sendMessage', message);
+      Session.set('waitingSince', new Date);
       $('#visitor-chat-input').val('');
       Session.set('typingMessage', '');
     }
@@ -56,24 +40,17 @@ Template.visitorChatlog.helpers({
     var messageData;
     var userId = Meteor.userId();
     var groupId = Session.get('currentGroup');
-    messageData = Messages.find({group: groupId, $or: [{to: userId}, {from: userId}]});
+    messageData = Messages.find();
     messageData.observeChanges({
-      added: function() {
+      added: function(id, message) {
         App.scrollToBottom('#visitor-chatlog');
+        if (message.to == Meteor.userId() && message.senderName != 'System') {
+          Session.set('waitingSince','');
+          Session.set('lastResponseFrom', message.senderName);
+        }
       }
     });
     return messageData;
-  }
-});
-
-Deps.autorun(function() {
-  var issue = Session.get('issue');
-  if (Meteor.user() && issue) {
-    Meteor.call('getGroups', issue, function(error, groups) {
-      if (groups && groups.length) {
-        Meteor.call('joinGroup', groups[0]);
-      }
-    });
   }
 });
 
@@ -83,6 +60,21 @@ Deps.autorun(function() {
     Meteor.subscribe('messages', currentGroup); 
   }
 });
+
+Deps.autorun(function() {
+  var issue = Session.get('issue');
+  if (Meteor.user() && issue) {
+    Meteor.call('getGroups', issue, function(error, groups) {
+      if (groups && groups.length) {
+        Meteor.call('joinGroup', groups[0]);
+        Session.set('waitingSince', new Date);
+      } else {
+        Router.go('visitor.entry');
+      }
+    });
+  }
+});
+
 
 /*****************************************************************************/
 /* Visitor: Lifecycle Hooks */

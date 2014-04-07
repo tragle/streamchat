@@ -15,6 +15,10 @@ Template.AgentInput.events({
       message.senderName = agent.profile.displayName;
       if (Session.get('sendTo')) {
         message.to = Session.get('sendTo');
+        var visitor = Meteor.presences.findOne({'userId': message.to});
+        if (visitor && visitor.state) {
+          message.recipientName = visitor.state.displayName;
+        }
       }
       Meteor.call('sendMessage', message);
       Session.set('typingMessage', '');
@@ -46,7 +50,15 @@ Template.AgentInput.helpers({
    */
 });
 
-
+Deps.autorun(function() {
+  var id = Session.get('chatFocus');
+  var name = '';
+  if (id) {
+    var user = Meteor.users.findOne({'_id': id});
+    name = user.profile.displayName;
+  }
+  Session.set('chatFocusName', name);
+});
 
 /*****************************************************************************/
 /* AgentInput: Lifecycle Hooks */
