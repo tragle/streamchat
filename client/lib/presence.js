@@ -1,7 +1,7 @@
 Meteor.Presence.state = function() {
   return {
     online: true,
-    displayName: Meteor.user() ? Meteor.user().profile.displayName : null,
+    displayName: Session.get('displayName'),
     skills: Meteor.user() ? Meteor.user().roles.skills: null,
     currentGroup: Session.get('currentGroup'),
     typingMessage: Session.get('typingMessage'),

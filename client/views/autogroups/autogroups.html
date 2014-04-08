@@ -1,0 +1,36 @@
+<template name="Autogroups">
+<div class="panel panel-default" id="autogroup-controls">
+  <div class="panel-heading"><h3>autogroup settings</h3></div>
+  <div class="panel-body">
+    <form class="form-horizontal" id="autogroup-form">
+      {{#with settings}}
+      <div class="form-group">
+        <label for="auto-max-agents" class="col-sm-3">max agents per group</label>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" id="auto-max-agents"
+          value="{{maxAgents}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="auto-max-queue" class="col-sm-3">max queue per group</label>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" id="auto-max-queue"
+          value="{{maxQueue}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="auto-group-skills" class="col-sm-3">group by skill</label>
+        <div class="col-sm-2">
+          {{#if groupSkills}}
+          <input type="checkbox" checked value="" class="checkbox" id="auto-group-skills">
+          {{else}}
+          <input type="checkbox" value="" class="checkbox" id="auto-group-skills">
+          {{/if}}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button> 
+      {{/with}}
+    </form>
+  </div>
+</div>
+</template>

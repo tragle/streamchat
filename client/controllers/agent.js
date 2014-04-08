@@ -48,6 +48,10 @@ AgentController = RouteController.extend({
   onRun: function() {
     if (Meteor.user() && Meteor.user().profile.fixedGroup) {
       Meteor.call('joinGroup', Meteor.user().profile.fixedGroup);
+    } else {
+      Meteor.call('findAutoGroup', function(error, groupId) {
+        Meteor.call('joinGroup', groupId);
+      });
     }
   },
 

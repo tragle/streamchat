@@ -7,7 +7,14 @@ App.Group = function() {
   this.name = '';
   this.isFixed = false;
   this.maxPerAgent = 0;
+  this.maxAgents = 0;
   this.maxQueue = 0;
+  this.agents = [];
+  this.agentCount = 0;
+  this.visitors = [];
+  this.visitorCount = 0;
+  this.queue = [];
+  this.queueCount = 0;
 };
 
 App.Message = function() {
@@ -26,8 +33,8 @@ App.Message = function() {
 App.User = function() {
   this.username = '';
   this.profile = {
-    displayname: '',
-    fixedGroup: '',
+    displayName: '',
+    fixedGroup: ''
   };
 };
 
@@ -49,11 +56,18 @@ App.checkIsAdmin = function(id) {
   }
 };
 
+App.checkIsAgent = function(id) {
+  if (!App.isAgent(id)) {
+    throw new Meteor.Error(403, 'Insufficient permissions.');
+  }
+};
+
+
 App.flashResult = function(error, id) {
   if (id) {
     var element = '#' + id;
-    $(element).addClass('success');
-    Meteor.setTimeout(function() {$(element).removeClass('success');}, 6000);
+    $(element).addClass('bg-success');
+    Meteor.setTimeout(function() {$(element).removeClass('bg-success');}, 6000);
   } else {
     alert(error);
   }

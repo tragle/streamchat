@@ -34,6 +34,11 @@ Meteor.methods({
     }
     if (userId && groupId) {
       console.log(userId + ' joining group ' + groupId);
+      if (App.isVisitor(userId)) {
+        Groups.update({'_id': groupId}, {$push: {visitors: userId}, $inc: {visitorCount: 1}});
+      } else {
+        Groups.update({'_id': groupId}, {$push: {agents: userId}, $inc: {agentCount: 1}});
+      }
       var user = Meteor.users.findOne({'_id': userId});
       var name = user.profile ? user.profile.displayName : 'Somebody';
       Meteor.call('notifyHere', groupId, name);
@@ -48,6 +53,11 @@ Meteor.methods({
     }
     if (userId && groupId) {
       console.log(userId + ' leaving group ' + groupId);
+      if (App.isVisitor(userId)) {
+        Groups.update({'_id': groupId}, {$pull: {visitors: userId}, $inc: {visitorCount: -1}});
+      } else {
+        Groups.update({'_id': groupId}, {$pull: {agents: userId}, $inc: {agentCount: -1}});
+      }
       var user = Meteor.users.findOne({'_id': userId});
       var name = user.profile ? user.profile.displayName : 'Somebody';
       Meteor.call('notifyGone', groupId, name);
@@ -81,5 +91,48 @@ Meteor.methods({
       console.log(sortedGroups);
       return sortedGroups;
     }
+  },
+  saveAutoGroupSettings: function(maxAgents, maxQueue, groupSkills) { 
+    App.checkIsAdmin(this.userId);
+    return AutoGroupSettings.upsert({}, {$set: {'maxAgents': maxAgents, 'maxQueue': maxQueue, 'groupSkills': groupSkills}});
+  },
+  findAutoGroup: function() {
+    App.checkIsAgent(this.userId);
+    var user = Meteor.users.findOne({'_id': this.userId});
+    var settings = AutoGroupSettings.findOne();
+    var maxAgents = settings.maxAgents;
+    // get autogroups that are not already full
+
+
+    var groups = Groups.find({
+      'isFixed': false
+    }).map(function(group) {
+      group.score = 0;
+      var agents = group.agents;
+      if (settings.joinSkill) {
+        Meteor.users.find({
+          '_id': {$in: agents},
+        }).map(function(agent) {
+          // give 1 point for each matching skill
+          var sameSkills = _.intersection(agent.skills, user.skills);
+          group.score += sameSkills.length;
+        });
+      }
+      // give 1 point for each available slot
+      var headroom = maxAgents - group.agentCount;
+      group.score += headroom;
+      // give 1 point for each visitor in queue
+      group.score += group.queueCount;
+      return group;
+    });
+    if (groups.length) {
+      return groups[0];
+    } else {
+      return Meteor.call('addAutoGroup');
+    }
+  },
+  addAutoGroup: function() {
+    var group = new App.Group();
+    return Groups.insert(group);
   }
 });
