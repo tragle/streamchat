@@ -17,6 +17,9 @@ Meteor.users.allow({
     if (App.isAdmin(userId)) {
       return true;
     }
+    if (userId == this.userId) {
+      return true;
+    }
     return false;
   },
 

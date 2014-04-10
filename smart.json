@@ -1,10 +1,7 @@
 {
   "packages": {
     "iron-router": {},
-      "roles": {},
-      "bootstrap-3": {},
-      "presence": {
-          "git": "https://github.com/tmeasday/meteor-presence.git"
-      }
+    "roles": {},
+    "bootstrap-3": {}
   }
 }

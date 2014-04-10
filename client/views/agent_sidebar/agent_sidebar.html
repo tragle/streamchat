@@ -1,12 +1,12 @@
 <template name="AgentSidebar">
 <div id="agent-sidebar">
   <div class="status-indicators">
+    <div class="text-muted group-name">{{groupName}}</div>
     <div class="text-info connection-status">{{connection}}</div> 
-    <div class="text-muted group-status">group: {{currentGroup}}</div>
   </div>
   <div class="agent-list panel panel-primary">
     {{#each groupAgents}}
-    <span class="label label-primary">{{state.displayName}}</span> 
+    <span class="label label-primary">{{displayName}}</span> 
     {{/each}}
   </div>
   <div>
@@ -15,11 +15,11 @@
       state.waitingSince}}alert-warning{{else}}alert-success{{/if}} {{#unless
       state.responder}}alert-danger{{/unless}} {{#if
    activated}}activated{{/if}}">
-      <div class="visitor-channel-name">{{this.state.displayName}}</div>
+      <div class="visitor-channel-name">{{displayName}}</div>
       <div>
         <span class="responder-name">
-          {{#if state.responder}}
-          <span class="label label-primary">{{state.responder}}</span>
+          {{#if responder}}
+          <span class="label label-primary">{{responder}}</span>
           {{/if}}
         </span>
         <span class="visitor-visibility pull-right">

@@ -1,34 +1,12 @@
-/*
- * Add query methods like this:
- *  Groups.findPublic = function () {
- *    return Groups.find({is_public: true});
- *  }
- */
+Meteor.setInterval(function() {
+  var allGroups = Groups.find({'isFixed': false}).map(function(group) {
+    return group._id;
+  });
+  var usedGroups = Connections.find().map(function(user) {
+    return user.currentGroup;
+  });
+  var deadGroups = _.difference(allGroups, usedGroups);
+  Groups.remove({'_id': {$in: deadGroups}});
+}, 1000 * 60 * 10);
 
-Groups.allow({
-  insert: function (userId, doc) {
-    return true;
-  },
 
-  update: function (userId, doc, fieldNames, modifier) {
-    return true;
-  },
-
-  remove: function (userId, doc) {
-    return true;
-  }
-});
-
-Groups.deny({
-  insert: function (userId, doc) {
-    return false;
-  },
-
-  update: function (userId, doc, fieldNames, modifier) {
-    return false;
-  },
-
-  remove: function (userId, doc) {
-    return false;
-  }
-});

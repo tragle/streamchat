@@ -1,7 +1,6 @@
 VisitorController = RouteController.extend({
   waitOn: function () {
-    Meteor.subscribe('presence');
-    Session.set('isVisitor', true);
+    Meteor.subscribe('connections');
   },
 
   layoutTemplate: 'Visitor',

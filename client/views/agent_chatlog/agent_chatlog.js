@@ -17,10 +17,11 @@ Template.AgentChatlog.helpers({
   messages : function() {
     var messageData;
     var focusId = Session.get('chatFocus');
+    var solos;
     if (focusId) {
       solos = [focusId];
     } else {
-      var solos = Filters.solos().map(function(doc){return doc.userId;});
+      solos = Filters.solos().map(function(doc){return doc.userId;});
     }
     var mutes = Filters.mutes().map(function(doc){return doc.userId;});
     if (solos.length) {
@@ -45,27 +46,28 @@ Template.AgentChatlog.helpers({
   },
   previews : function() {
     var previewData;
+    var solos;
     var focusId = Session.get('chatFocus');
     if (focusId) {
       solos = [focusId];
     } else {
-      var solos = Filters.solos().map(function(doc){return doc.userId;});
+      solos = Filters.solos().map(function(doc){return doc.userId;});
     }
     var mutes = Filters.mutes().map(function(doc){return doc.userId;});
     if (solos.length) {
-      previewData = Meteor.presences.find({
-        'state.online': true, 
+      previewData = Connections.find({
           $or: [
-            {'state.chatFocus': {$in: solos}}, 
-            {'userId': {$in: solos}}
+            {'chatFocus': {$in: solos}}, 
+            {'_id': {$in: solos}}
           ], 
-          'state.typingMessage': {$ne: ''}},
-        {$fields: {'state.displayName': 1, 'state.typingMessage': 1, 'state.chatFocusName':1}}
+          'typingMessage': {$ne: ''}},
+        {$fields: {'displayName': 1, 'typingMessage': 1, 'chatFocusName':1}}
       );
     } else {
-      previewData = Meteor.presences.find(
-        {'state.online': true, 'state.currentGroup': Session.get('currentGroup'), 'state.typingMessage': {$ne: ''}},
-        {$fields: {'state.displayName': 1, 'state.typingMessage': 1, 'state.chatFocusName':1}}
+      previewData = Connections.find(
+        {'currentGroup': Session.get('currentGroup'), 
+          'typingMessage': {$ne: ''}},
+        {$fields: {'displayName': 1, 'typingMessage': 1, 'chatFocusName':1}}
       );
     }
     previewData.observeChanges({

@@ -14,7 +14,13 @@
 
 .group-status {
   font-size: 6pt;
+  visibility: hidden;
 }
+
+.group-status:hover {
+  visibility: visible;
+}
+
 
 .agent-list {
   margin-top: 10px;

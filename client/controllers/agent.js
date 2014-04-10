@@ -1,43 +1,44 @@
 AgentController = RouteController.extend({
   waitOn: function () {
+    Meteor.subscribe('connections')
     Meteor.subscribe('messages', Session.get('currentGroup'));
     Meteor.subscribe('visitors');
-    Meteor.subscribe('presence');
+    Meteor.subscribe('groups');
   },
 
   data: {
     currentGroup: function() {
-      return Session.get('currentGroup'); 
+      return Session.get('currentGroup');
     },
     sendTo: function() {
       var id = Session.get('sendTo');
-      var user = Meteor.presences.findOne({'userId': id});
-      if (user && user.state) {
-        return user.state.displayName;
+      var user = Meteor.users.findOne(id);
+      if (user && user.profile) {
+        return user.profile.displayName;
       } 
     },
     groupVisitors: function() {
-      return Meteor.presences.find({
-        'state.currentGroup': Session.get('currentGroup'),
-        'state.isVisitor': true  
-      }, { transform:function(doc) {
-        if (Filters.isMute(doc.userId)) {
-          doc.isMute = true;
+      return Connections.find({
+        'currentGroup': Session.get('currentGroup'),
+        'isVisitor': true  
+      }, { transform: function(user) {
+        if (Filters.isMute(user._id)) {
+          user.isMute = true;
         }
-        if (Filters.isSolo(doc.userId)) {
-          doc.isSolo = true;
+        if (Filters.isSolo(user._id)) {
+          user.isSolo = true;
         }
-        if (Session.get('sendTo') == doc.userId) {
-          doc.activated = true;
+        if (Session.get('sendTo') == user._id) {
+          user.activated = true;
         }
-        return doc;
+        return user;
       }
       });
     },
     groupAgents: function() {
-      return Meteor.presences.find({
-        'state.currentGroup': Session.get('currentGroup'),
-        'state.isVisitor': {$not: true} 
+      return Connections.find({
+        'currentGroup': Session.get('currentGroup'),
+        'isVisitor': false
       });
     },
   },  
@@ -46,26 +47,25 @@ AgentController = RouteController.extend({
   },
 
   onRun: function() {
-    if (Meteor.user() && Meteor.user().profile.fixedGroup) {
-      Meteor.call('joinGroup', Meteor.user().profile.fixedGroup);
-    } else {
-      Meteor.call('findAutoGroup', function(error, groupId) {
-        Meteor.call('joinGroup', groupId);
-      });
+    if (!Session.get('currentGroup')) {
+      if (Meteor.user() && Meteor.user().profile.fixedGroup) {
+        Meteor.call('joinGroup', Meteor.user().profile.fixedGroup);
+      } else {
+        Meteor.call('findAutoGroup', function(error, groupId) {
+          Meteor.call('joinGroup', groupId);
+        });
+      }
     }
   },
 
   onStop: function() {
-    if (Session.get('currentGroup')) {
-      Meteor.call('leaveGroup', Session.get('currentGroup'));
-    }
   }
 
 });
 
 Deps.autorun(function() {
   var id = Session.get('sendTo');
-  if (!Meteor.presences.findOne({'userId': id})) {
+  if (!Connections.findOne({'_id': id, 'online':true})) {
     Session.set('sendTo', '');
   }
 });

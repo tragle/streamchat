@@ -8,16 +8,16 @@ Template.AgentInput.events({
     var message = new App.Message();
     var agent = Meteor.user();
     message.body = $('#agent-input-message').val();
+    message.body = message.body.trim();
     if (message.body) {
-      message.body = message.body.trim();
-      message.group = Session.get('currentGroup'); 
-      message.from = agent._id;
+      message.group = Session.get('currentGroup');
+      message.from =  Meteor.userId();
       message.senderName = agent.profile.displayName;
       if (Session.get('sendTo')) {
         message.to = Session.get('sendTo');
-        var visitor = Meteor.presences.findOne({'userId': message.to});
-        if (visitor && visitor.state) {
-          message.recipientName = visitor.state.displayName;
+        var visitor = Meteor.users.findOne({'_id': message.to});
+        if (visitor && visitor.profile) {
+          message.recipientName = visitor.profile.displayName;
         }
       }
       Meteor.call('sendMessage', message);
@@ -36,7 +36,7 @@ Template.AgentInput.events({
       Session.set('typingMessage', $('#agent-input-message').val());
     } else { 
       Session.set('chatFocus', null);
-      Session.set('typingMessage', '');
+      Session.set('typingMessage', '')
     }
   }
 });
@@ -54,10 +54,17 @@ Deps.autorun(function() {
   var id = Session.get('chatFocus');
   var name = '';
   if (id) {
-    var user = Meteor.users.findOne({'_id': id});
+    var user = Meteor.users.findOne(id);
     name = user.profile.displayName;
   }
   Session.set('chatFocusName', name);
+});
+
+Deps.autorun(function() {
+  var currentGroup = Session.get('currentGroup');
+  if (currentGroup) {
+    Meteor.subscribe('messages', currentGroup); 
+  }
 });
 
 /*****************************************************************************/

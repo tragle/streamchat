@@ -4,11 +4,7 @@
     "basePackages": {
       "iron-router": {},
       "roles": {},
-      "bootstrap-3": {},
-      "presence": {
-        "git": "https://github.com/tmeasday/meteor-presence.git",
-        "branch": "master"
-      }
+      "bootstrap-3": {}
     },
     "packages": {
       "iron-router": {
@@ -25,11 +21,6 @@
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
         "tag": "v3.1.1-1",
         "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
-      },
-      "presence": {
-        "git": "https://github.com/tmeasday/meteor-presence.git",
-        "branch": "master",
-        "commit": "b711203b3e66df2b7737175cc0ff3e42f70df923"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

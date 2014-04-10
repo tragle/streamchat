@@ -19,3 +19,4 @@ Router.map(function () {
   this.route('visitor.entry', {path: '/visitor'});
   this.route('autogroups', {path: '/autogroups'});
 });
+

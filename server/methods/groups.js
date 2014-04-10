@@ -34,15 +34,11 @@ Meteor.methods({
     }
     if (userId && groupId) {
       console.log(userId + ' joining group ' + groupId);
-      if (App.isVisitor(userId)) {
-        Groups.update({'_id': groupId}, {$push: {visitors: userId}, $inc: {visitorCount: 1}});
-      } else {
-        Groups.update({'_id': groupId}, {$push: {agents: userId}, $inc: {agentCount: 1}});
-      }
-      var user = Meteor.users.findOne({'_id': userId});
+      Connections.update({'_id': userId}, {$set: {currentGroup: groupId}});
+      var user = Meteor.users.findOne(userId);
       var name = user.profile ? user.profile.displayName : 'Somebody';
       Meteor.call('notifyHere', groupId, name);
-      if (user.roles && _.contains(user.roles.permissions, 'visitor')) {
+      if (App.isVisitor(userId)) {
         Meteor.call('notifyWelcome', groupId, name, userId);
       }
     }
@@ -53,15 +49,11 @@ Meteor.methods({
     }
     if (userId && groupId) {
       console.log(userId + ' leaving group ' + groupId);
-      if (App.isVisitor(userId)) {
-        Groups.update({'_id': groupId}, {$pull: {visitors: userId}, $inc: {visitorCount: -1}});
-      } else {
-        Groups.update({'_id': groupId}, {$pull: {agents: userId}, $inc: {agentCount: -1}});
-      }
-      var user = Meteor.users.findOne({'_id': userId});
+      Connections.update({'_id': userId}, {$set: {currentGroup: null}});
+      var user = Meteor.users.findOne(userId);
       var name = user.profile ? user.profile.displayName : 'Somebody';
       Meteor.call('notifyGone', groupId, name);
-      if (App.isVisitor(this.userId)) {
+      if (App.isVisitor(userId)) {
         Meteor.call('expireMessages', userId);
       }
     }
@@ -72,8 +64,9 @@ Meteor.methods({
     function skillPoints(skill) {
       if (skill) {
         // get array of groups where online user has this skill
-        var groups = Meteor.presences.find({'state.online': true, 'state.skills': {$in: [skill]}}).map(function(doc) {
-          return doc.state.currentGroup;
+        var groups = Connections.find({'online': true, 'skills': {$in: [skill]}}).map(function(doc) {
+          console.log(doc);
+          return doc.currentGroup;
         });
         // get the number of users with that skill in each 
         var counts = _.countBy(groups);
@@ -88,7 +81,6 @@ Meteor.methods({
         sortedGroups[points[id]] = id;
       }
       sortedGroups= _.toArray(sortedGroups).reverse();
-      console.log(sortedGroups);
       return sortedGroups;
     }
   },
@@ -101,38 +93,43 @@ Meteor.methods({
     var user = Meteor.users.findOne({'_id': this.userId});
     var settings = AutoGroupSettings.findOne();
     var maxAgents = settings.maxAgents;
-    // get autogroups that are not already full
-
-
+    // get autogroups
     var groups = Groups.find({
       'isFixed': false
     }).map(function(group) {
       group.score = 0;
-      var agents = group.agents;
-      if (settings.joinSkill) {
-        Meteor.users.find({
-          '_id': {$in: agents},
-        }).map(function(agent) {
+      var agents = Connections.find({'isVisitor': false, 'currentGroup': group._id});
+      if (settings.groupSkills) {
+        agents.forEach(function(agent) {
           // give 1 point for each matching skill
           var sameSkills = _.intersection(agent.skills, user.skills);
           group.score += sameSkills.length;
         });
       }
       // give 1 point for each available slot
-      var headroom = maxAgents - group.agentCount;
+      var headroom = maxAgents - agents.count();
+      if (headroom <= 0) {
+        group.isFull = true;
+      }
       group.score += headroom;
       // give 1 point for each visitor in queue
-      group.score += group.queueCount;
+      var queue = Connections.find({'isVisitor': true, 'currentGroup': group._id, 'queued': true});
+      group.score += queue.count();
       return group;
     });
-    if (groups.length) {
-      return groups[0];
+    // remove groups already full of agents
+    var availableGroups = _.reject(groups, function(group) { return group.isFull == true;});
+    console.log(availableGroups);
+    if (availableGroups.length) {
+      return availableGroups[0]._id;
     } else {
       return Meteor.call('addAutoGroup');
     }
   },
   addAutoGroup: function() {
     var group = new App.Group();
+    var autoGroupCount = Groups.find({'isFixed': false}).count();
+    group.name = 'autogroup ' + ++autoGroupCount;
     return Groups.insert(group);
   }
 });

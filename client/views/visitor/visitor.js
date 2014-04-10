@@ -15,9 +15,10 @@ Template.Visitor.events({
     var message = new App.Message();
     var visitor = Meteor.user();
     message.body = $('#visitor-chat-input').val();
+    message.body = message.body.trim();
     if (message.body) {
       message.group = Session.get('currentGroup'); 
-      message.from = visitor._id;
+      message.from = Meteor.userId();
       message.senderName = visitor.profile.displayName;
       message.isVisitor = true; 
       Meteor.call('sendMessage', message);
@@ -28,6 +29,7 @@ Template.Visitor.events({
   },
   'keyup #visitor-chat-input': function(e) {
     if ($('#visitor-chat-input').val()) {
+      
       Session.set('typingMessage', $('#visitor-chat-input').val());
     } else { 
       Session.set('typingMessage', '');
@@ -55,13 +57,6 @@ Template.visitorChatlog.helpers({
 });
 
 Deps.autorun(function() {
-  var currentGroup = Session.get('currentGroup');
-  if (currentGroup) {
-    Meteor.subscribe('messages', currentGroup); 
-  }
-});
-
-Deps.autorun(function() {
   var issue = Session.get('issue');
   if (Meteor.user() && issue) {
     Meteor.call('getGroups', issue, function(error, groups) {
@@ -74,6 +69,7 @@ Deps.autorun(function() {
     });
   }
 });
+
 
 
 /*****************************************************************************/

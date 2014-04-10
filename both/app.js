@@ -9,12 +9,6 @@ App.Group = function() {
   this.maxPerAgent = 0;
   this.maxAgents = 0;
   this.maxQueue = 0;
-  this.agents = [];
-  this.agentCount = 0;
-  this.visitors = [];
-  this.visitorCount = 0;
-  this.queue = [];
-  this.queueCount = 0;
 };
 
 App.Message = function() {
@@ -34,7 +28,8 @@ App.User = function() {
   this.username = '';
   this.profile = {
     displayName: '',
-    fixedGroup: ''
+    fixedGroup: '',
+    isVisitor: ''
   };
 };
 

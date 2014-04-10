@@ -11,14 +11,12 @@
   </div>
   {{/each}}
   {{#each previews}}
-  {{#with state}}
   {{#if typingMessage}}
   <div class="message text-muted">
     <span class="sender">{{displayName}} {{#if chatFocusName}} >
     {{chatFocusName}} {{/if}}</span> <span class="body">{{typingMessage}}</span>
   </div>
   {{/if}}
-  {{/with}}
   {{/each}}
   {{else}}
   <h4>no group...</h4>

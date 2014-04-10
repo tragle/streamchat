@@ -28,7 +28,13 @@ Template.AgentSidebar.events({
 
 Template.AgentSidebar.helpers({
   connection: function() { return Meteor.status().status; },
-  filters: function() {return Filters.find();}
+  filters: function() {return Filters.find();},
+  groupName: function() {
+    group = Groups.findOne({'_id': Session.get('currentGroup')});
+    if (group) {
+      return group.name;
+    }
+  }
 });
 
 /*****************************************************************************/

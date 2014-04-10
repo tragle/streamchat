@@ -8,7 +8,6 @@ Meteor.startup(function() {
     var id = Accounts.createUser(admin);
     Roles.setUserRoles(id, ['admin','agent'], 'permissions');
   }
-  Meteor.settings.presenceTimeout = 10000;
   if (!AutoGroupSettings.findOne()) {
     AutoGroupSettings.insert({'maxAgents': 1, 'maxQueue': 0, 'groupSkills': false});
   }

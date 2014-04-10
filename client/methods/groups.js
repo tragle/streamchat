@@ -7,7 +7,7 @@ Meteor.methods({
     Session.set('currentGroup', groupId);
   },
   leaveGroup: function() {
-      Session.set('currentGroup', null);
-      Session.set('chatFocus', null);
+    Session.set('currentGroup', null);
+    Session.set('chatFocus', null);
   }
 });
