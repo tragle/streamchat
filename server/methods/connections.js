@@ -1,6 +1,6 @@
 Meteor.methods({
-  updateState: function(state) {
-    if (this.userId) {
+  updateState: function(groupId, state) {
+    if (this.userId && groupId) {
       var newState = {};
       if (App.isVisitor(this.userId)) {
         newState.isVisitor = true;
@@ -8,19 +8,42 @@ Meteor.methods({
         newState.isVisitor = false;
       }
       newState.updated = (new Date()).getTime();
+      newState._id = this.userId;
       if (state) {
         newState = _.extend(newState, state);
       }
-      return Connections.upsert({'_id': this.userId}, {$set: newState});
-    } 
-  },
-  keepAlive: function() {
-    if (this.userId) {
-      return Connections.upsert({'_id': this.userId}, {$set: {updated: (new Date()).getTime() }});
+      if (Groups.findOne({'connections._id': this.userId})) {
+        return Groups.update(
+          {'_id': groupId, 'connections._id': this.userId},
+          {$set: {'connections.$': newState}}
+        );
+      } else if (Groups.findOne({'queue._id': this.userId})) {
+        return Groups.update(
+          {'_id': groupId, 'queue._id': this.userId},
+          {$set: {'queue.$': newState}}
+        );
+      } else {
+        Meteor.call('joinGroup', groupId, newState);
+      }
     }
   },
-  setTyping: function(message) {
-    Connections.update({_id: this.userId}, {$set: {typingMessage: message}});
+  keepAlive: function(groupId) {
+    if (this.userId && groupId) {
+      return Groups.update(
+        {'_id': groupId, 'connections._id': this.userId},  
+        {$set: {'connections.$.updated': (new Date()).getTime()}}
+      );
+    }
+  },
+  setTyping: function(groupId, message, toName, toId) {
+    if (groupId && this.userId) {
+      if (!toName) toName = '';
+      if (!toId) tiId = '';
+      var displayName = Meteor.users.findOne({'_id': this.userId}).profile.displayName;
+      return Previews.upsert(
+        {'_id': this.userId}, 
+        {$set: {'group': groupId, 'body': message, 'to': toName, 'toId': toId, 'displayName': displayName}});
+    }
   }
 });
 

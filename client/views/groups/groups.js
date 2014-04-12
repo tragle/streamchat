@@ -4,11 +4,11 @@
 Template.Groups.events({
   'click #add-group-button': function(e) {
     e.preventDefault();
-    var group = new App.Group();
+    var group = new Models.Group();
     var agentIds = [];
     group.name = $('#add-group-name').val();
-    group.maxPerAgent = $('#add-group-max-per-agent').val() || null;
-    group.maxQueue = $('#add-group-max-queue').val() || null;
+    group.maxAgentVisitors = $('#add-group-max-per-agent').val() || 0;
+    group.maxQueue = $('#add-group-max-queue').val() || 0;
     $('.add-group-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
     group.isFixed = true;
     $('input[id^="add-group"]').val('');
@@ -28,10 +28,10 @@ Template.Groups.events({
     var agentIds = [];
     var button = e.currentTarget;
     var name = $(button).parents('tr').find('input.group-name').val();
-    var maxPerAgent = $(button).parents('tr').find('input.group-max-per-agent').val();
+    var maxAgentVisitors = $(button).parents('tr').find('input.group-max-per-agent').val();
     var maxQueue = $(button).parents('tr').find('input.group-max-agents').val();
     $('.group-agent-picker input:checked').each(function() { agentIds.push($(this).val()); });
-    Meteor.call('updateGroup',this._id, {name: name, maxPerAgent: maxPerAgent, maxQueue: maxQueue}, App.flashResult);
+    Meteor.call('updateGroup',this._id, {name: name, maxAgentVisitors: maxAgentVisitors, maxQueue: maxQueue}, App.flashResult);
     if (agentIds.length) {
       Meteor.call('addFixedUsers', this._id, agentIds);
     }

@@ -2,19 +2,19 @@
 <div id="agent-chatlog">
   {{#if currentGroup}}
   {{#each messages}}
-  <div class="message {{#if expired}}text-info{{/if}}">
+  <div class="message {{#if expired}}text-info expired{{/if}}">
     <span class="sender">{{senderName}} {{#if recipientName}}
-    > {{recipientName}} 
-    {{/if}}  
-  </span>
+      > {{recipientName}} 
+      {{/if}}  
+    </span>
     <span class="body">{{body}}</span>
   </div>
   {{/each}}
   {{#each previews}}
-  {{#if typingMessage}}
+  {{#if body}}
   <div class="message text-muted">
-    <span class="sender">{{displayName}} {{#if chatFocusName}} >
-    {{chatFocusName}} {{/if}}</span> <span class="body">{{typingMessage}}</span>
+    <span class="sender">{{displayName}} {{#if to}} >
+      {{to}} {{/if}}</span> <span class="body">{{body}}</span>
   </div>
   {{/if}}
   {{/each}}

@@ -1,19 +1,22 @@
 <template name="VisitorEntry">
 <div class="container" id="visitor-entry-ui">
+  {{#if noGroup}}
+  <div class="text-danger">No agents found!</div>
+  <p></p>
+  {{/if}}
   <form role="form" id="visitor-entry-survey">
     <div class="form-group">
       <input type="text" class="form-control" placeholder="Name"
-       id="visitor-name" required autofocus>
+      id="visitor-name" required autofocus>
     </div>
     <div class="form-group">
       <input type="text" class="form-control" placeholder="Email"
-       id="visitor-email" required>
+      id="visitor-email" required>
     </div>
     <div class="form-group">
       <input type="text" class="form-control" placeholder="Issue"
-       id="visitor-issue">
+      id="visitor-issue">
     </div>
-
     <button type="submit" class="btn btn-default">Start chatting</button>
   </form> 
 </div>

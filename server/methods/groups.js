@@ -28,65 +28,124 @@ Meteor.methods({
     var result = Meteor.users.update({'_id': {$in: userIds}}, {$set: {'profile.fixedGroup': groupId}}, {multi:true});
     return result;
   },
-  joinGroup: function(groupId, userId) {
-    if (!userId) {
-      userId = this.userId;
-    }
+  joinGroup: function(groupId, connection) {
+    var userId = this.userId;
     if (userId && groupId) {
       console.log(userId + ' joining group ' + groupId);
-      Connections.update({'_id': userId}, {$set: {currentGroup: groupId}});
-      var user = Meteor.users.findOne(userId);
-      var name = user.profile ? user.profile.displayName : 'Somebody';
-      Meteor.call('notifyHere', groupId, name);
+      var group = Groups.findOne(groupId);
+      var visitorHeadroom = Meteor.call('getVisitorHeadroom', groupId);
+      if (!group) return;
       if (App.isVisitor(userId)) {
-        Meteor.call('notifyWelcome', groupId, name, userId);
+        if (visitorHeadroom <= 0 || group.queue.length) {
+          return Groups.update(
+            {'_id': groupId},
+            {$push: {'queue': connection}}
+          );
+        }
       }
+      return Groups.update(
+        {'_id': groupId},
+        {$push: {'connections': connection}}
+      );
     }
   },
   leaveGroup: function(groupId, userId) {
     if (!userId) {
       userId = this.userId;
     }
+    console.log(userId + ' leaving group ' + groupId);
+    Groups.update(
+      {'_id': groupId},
+      {$pull: {'connections': {'_id': userId}}}
+    );
+    Groups.update(
+      {'_id': groupId},
+      {$pull: {'queue': {'_id': userId}}}
+    );
     if (userId && groupId) {
-      console.log(userId + ' leaving group ' + groupId);
-      Connections.update({'_id': userId}, {$set: {currentGroup: null}});
-      var user = Meteor.users.findOne(userId);
-      var name = user.profile ? user.profile.displayName : 'Somebody';
-      Meteor.call('notifyGone', groupId, name);
-      if (App.isVisitor(userId)) {
-        Meteor.call('expireMessages', userId);
-      }
+      Meteor.call('expireMessages', userId);
     }
   },
-  getGroups: function(skill) {
-    console.log('getting groups for ' + skill);
-    var points;
-    function skillPoints(skill) {
-      if (skill) {
-        // get array of groups where online user has this skill
-        var groups = Connections.find({'online': true, 'skills': {$in: [skill]}}).map(function(doc) {
-          console.log(doc);
-          return doc.currentGroup;
-        });
-        // get the number of users with that skill in each 
-        var counts = _.countBy(groups);
-        return counts; 
-      }
-    };
-    points = skillPoints(skill);
-    // sort by points
-    var sortedGroups= {};
-    if (points) {
-      for (id in points) {
-        sortedGroups[points[id]] = id;
-      }
-      sortedGroups= _.toArray(sortedGroups).reverse();
-      return sortedGroups;
+  getVisitorHeadroom: function(groupId) {
+    var group = Groups.findOne(groupId);
+    var headroom;
+    var maxAgentVisitors;
+    if (group.isFixed) {
+      maxAgentVisitors = group.maxAgentVisitors || 0;
+    } else {
+      maxAgentVisitors = settings.maxAgentVisitors || 0;
     }
+    console.log('max agent visitors ' + maxAgentVisitors);
+    var visitors = _.filter(group.connections, function(user) {
+      return !!user.isVisitor;
+    });
+    var numVisitors = visitors.length;
+    var numAgents = group.connections.length - visitors.length;
+    console.log('visitors: ' + numVisitors);
+    console.log('agents: ' + numAgents);
+    headroom = (maxAgentVisitors * numAgents) - numVisitors; 
+    console.log(headroom);
+    return headroom;
   },
-  saveAutoGroupSettings: function(maxAgents, maxQueue, groupSkills) { 
+  getQueueHeadroom: function(groupId) {
+    var group = Groups.findOne(groupId);
+    var headroom;
+    if (group.isFixed) {
+      maxQueue = group.maxQueue || 0;
+    } else {
+      maxQueue = group.maxQueue || 0;
+    }
+    var queueDepth = group.queue.length || 0;
+    headroom = maxQueue - queueDepth;
+    return headroom;
+  },
+  routeVisitor: function(skill) {
+    if (!skill) return;
+    var foundId = '';
+    var settings = AutoGroupSettings.findOne();
+    var groups = Groups.find({ 'connections.skills': {$in: [skill]}}).map(function(group) {
+      var skilledAgents = _.filter(group.connections, function(user) {
+        return _.contains(user.skills, skill);
+      });
+      var headroom = Meteor.call('getVisitorHeadroom', group._id);
+      console.log('skills ' + skilledAgents.length);
+      console.log('headroom ' + headroom);
+      group.points = 0;
+      group.ponts += skilledAgents.length || 0;
+      group.points += headroom || 0;
+      group.queueSlots = Meteor.call('getQueueHeadroom', group._id);
+      console.log('queueSlots ' + group.queueSlots);
+      group.fullGroup = !!(headroom + group.queueSlots <= 0);
+      console.log('full ' + group.fullGroup);
+      return group;
+    });
+    _.reject(groups, function(group) {return !!group.fullGroup;});
+    if (!groups) return;
+    console.log('Routing ' + this.userId + ' to skill ' + skill);
+    var pointsTable = _.groupBy(groups, function(group) {return group.points;});
+    var topScore = _.max(_.keys(pointsTable));
+    var topGroups = [];
+    if (topScore) {
+      topGroups = pointsTable[topScore];
+    } 
+    if (topGroups && topGroups.length) {
+      if (topGroups.length > 1) {
+        var queueSlotsTable = _.groupBy(topGroups, function(group) {return group.queueSlots;});
+        var bestQueue = _.max(_keys(queueSlotsTable));
+        if (queueSlotsTable[bestQueue]) {
+          foundId = queueSlotsTable[bestQueue]._id;
+        }
+      } else {
+        foundId = topGroups[0]._id;
+      }
+    }
+    if (foundId) console.log('Found group: ' + foundId);
+    if (!foundId) console.log('No group found.');
+    return foundId;
+  },  
+  saveAutoGroupSettings: function(maxAgents, maxQueue, maxAgentVisitors, groupSkills) { 
     App.checkIsAdmin(this.userId);
-    return AutoGroupSettings.upsert({}, {$set: {'maxAgents': maxAgents, 'maxQueue': maxQueue, 'groupSkills': groupSkills}});
+    return AutoGroupSettings.upsert({}, {$set: {'maxAgents': maxAgents, 'maxAgentVisitors': maxAgentVisitors, 'maxQueue': maxQueue, 'groupSkills': groupSkills}});
   },
   findAutoGroup: function() {
     App.checkIsAgent(this.userId);
@@ -127,7 +186,7 @@ Meteor.methods({
     }
   },
   addAutoGroup: function() {
-    var group = new App.Group();
+    var group = new Models.Group();
     var autoGroupCount = Groups.find({'isFixed': false}).count();
     group.name = 'autogroup ' + ++autoGroupCount;
     return Groups.insert(group);

@@ -16,7 +16,7 @@ Router.map(function () {
   this.route('messages', {path: '/messages'});
   this.route('agent', {path: '/agent'});
   this.route('visitor', {path: '/chat'});
-  this.route('visitor.entry', {path: '/visitor'});
+  this.route('visitor.entry', {path: '/visitor/:reason?'});
   this.route('autogroups', {path: '/autogroups'});
 });
 

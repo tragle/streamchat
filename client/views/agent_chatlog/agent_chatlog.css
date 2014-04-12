@@ -22,4 +22,7 @@
     margin-right: 10px;
 }
 
+.expired {
+  font-style: italic;
+}
 

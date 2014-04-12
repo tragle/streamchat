@@ -21,13 +21,13 @@ Template.AgentChatlog.helpers({
     if (focusId) {
       solos = [focusId];
     } else {
-      solos = Filters.solos().map(function(doc){return doc.userId;});
+      solos = Filters.solos().map(function(user){return user._id;});
     }
-    var mutes = Filters.mutes().map(function(doc){return doc.userId;});
+    var mutes = Filters.mutes().map(function(user){return user._id;});
     if (solos.length) {
       messageData = Messages.find({
         $or: [
-          {to: {$in: _.flatten([solos,''])}}, 
+          {to: {$in: solos}}, 
           {from: {$in: solos}}
         ]});
     } else {
@@ -45,30 +45,27 @@ Template.AgentChatlog.helpers({
     return messageData;
   },
   previews : function() {
-    var previewData;
+    var previewData = [];
     var solos;
     var focusId = Session.get('chatFocus');
     if (focusId) {
       solos = [focusId];
     } else {
-      solos = Filters.solos().map(function(doc){return doc.userId;});
+      solos = Filters.solos().map(function(user){return user._id;});
     }
-    var mutes = Filters.mutes().map(function(doc){return doc.userId;});
+    var mutes = Filters.mutes().map(function(user){return user._id;});
     if (solos.length) {
-      previewData = Connections.find({
-          $or: [
-            {'chatFocus': {$in: solos}}, 
-            {'_id': {$in: solos}}
-          ], 
-          'typingMessage': {$ne: ''}},
-        {$fields: {'displayName': 1, 'typingMessage': 1, 'chatFocusName':1}}
-      );
+      previewData = Previews.find({
+        'group': Session.get('currentGroup'),
+        'body': {$ne: ''},
+        'toId': {$in: solos}
+      });
     } else {
-      previewData = Connections.find(
-        {'currentGroup': Session.get('currentGroup'), 
-          'typingMessage': {$ne: ''}},
-        {$fields: {'displayName': 1, 'typingMessage': 1, 'chatFocusName':1}}
-      );
+      previewData = Previews.find({
+        'group': Session.get('currentGroup'),
+        'body': {$ne: ''},
+        'toId': {$nin: mutes}
+      });
     }
     previewData.observeChanges({
       added: function() {

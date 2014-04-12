@@ -9,7 +9,8 @@
       {{#each groups}}
       <tr id="{{_id}}">
         <td><input type="text" class="form-control group-name" value="{{name}}"></td>
-        <td><input type="number" class="form-control group-max-per-agent" value="{{maxPerAgent}}"></td>
+        <td><input type="number" class="form-control group-max-per-agent"
+          value="{{maxAgentVisitors}}"></td>
         <td><input type="number" class="form-control group-max-queue" value="{{maxQueue}}"></td>
         <td><div class="dropdown">
             <span class="form-control dropdown-toggle unselectable" data-toggle="dropdown">Fixed agents <span class="caret"></span></span>

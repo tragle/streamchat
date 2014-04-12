@@ -4,7 +4,7 @@
 Template.VisitorEntry.events({
   'submit #visitor-entry-survey': function(e) {
     e.preventDefault();
-    var visitor = new App.User();
+    var visitor = new Models.User();
     visitor.username = $('#visitor-email').val();
     visitor.email = $('#visitor-email').val();
     visitor.profile.displayName = $('#visitor-name').val();

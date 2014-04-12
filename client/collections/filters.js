@@ -9,26 +9,26 @@ Filters.solos = function() {
 };
 
 Filters.isMute = function(userId) {
-  return !!Filters.findOne({'userId':userId, 'isMute':true});
+  return !!Filters.findOne({'_id':userId, 'isMute':true});
 };
 
 Filters.isSolo = function(userId) {
-  return !!Filters.findOne({'userId':userId, 'isSolo':true});
+  return !!Filters.findOne({'_id':userId, 'isSolo':true});
 };
 
 Filters.setMute = function(userId) {
-  return Filters.upsert({'userId':userId}, {$set: {'isMute':true, 'isSolo':false}});
+  return Filters.upsert({'_id':userId}, {$set: {'isMute':true, 'isSolo':false}});
 };
 
 Filters.setSolo = function(userId) {
-  return Filters.upsert({'userId':userId}, {$set: {'isMute':false, 'isSolo':true}});
+  return Filters.upsert({'_id':userId}, {$set: {'isMute':false, 'isSolo':true}});
 };
 
 Filters.unMute = function(userId) {
-  return Filters.upsert({'userId':userId}, {$set: {'isMute':false}});
+  return Filters.upsert({'_id':userId}, {$set: {'isMute':false}});
 };
 
 Filters.unSolo = function(userId) {
-  return Filters.upsert({'userId':userId}, {$set: {'isSolo':false}});
+  return Filters.upsert({'_id':userId}, {$set: {'isSolo':false}});
 };
 

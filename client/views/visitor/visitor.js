@@ -5,14 +5,12 @@ Template.Visitor.events({
   'click #visitor-logout': function(e) {
     e.preventDefault();
     Meteor.call('leaveGroup', Session.get('currentGroup'), Meteor.userId());
-    Session.set('waitingSince', '');
-    Session.set('lastResponseFrom', '');
     Meteor.logout();
     Router.go('visitor.entry');
   },
   'submit #visitor-chat-controls': function(e) {
     e.preventDefault();
-    var message = new App.Message();
+    var message = new Models.Message();
     var visitor = Meteor.user();
     message.body = $('#visitor-chat-input').val();
     message.body = message.body.trim();
@@ -29,7 +27,6 @@ Template.Visitor.events({
   },
   'keyup #visitor-chat-input': function(e) {
     if ($('#visitor-chat-input').val()) {
-      
       Session.set('typingMessage', $('#visitor-chat-input').val());
     } else { 
       Session.set('typingMessage', '');
@@ -58,13 +55,13 @@ Template.visitorChatlog.helpers({
 
 Deps.autorun(function() {
   var issue = Session.get('issue');
-  if (Meteor.user() && issue) {
-    Meteor.call('getGroups', issue, function(error, groups) {
-      if (groups && groups.length) {
-        Meteor.call('joinGroup', groups[0]);
+  if (Meteor.userId() && issue) {
+    Meteor.call('routeVisitor', issue, function(error, groupId) {
+      if (groupId) {
+        Session.set('currentGroup', groupId);
         Session.set('waitingSince', new Date);
       } else {
-        Router.go('visitor.entry');
+        Router.go('visitor.entry', {'reason':'nogroup'});
       }
     });
   }

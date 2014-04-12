@@ -12,14 +12,14 @@
   <div>
     {{#each groupVisitors}}
      <div class="visitor-channel alert {{#if
-      state.waitingSince}}alert-warning{{else}}alert-success{{/if}} {{#unless
-      state.responder}}alert-danger{{/unless}} {{#if
+      waitingSince}}alert-warning{{else}}alert-success{{/if}} {{#unless
+      lastResponseFrom}}alert-danger{{/unless}} {{#if
    activated}}activated{{/if}}">
       <div class="visitor-channel-name">{{displayName}}</div>
       <div>
         <span class="responder-name">
-          {{#if responder}}
-          <span class="label label-primary">{{responder}}</span>
+          {{#if lastResponseFrom}}
+          <span class="label label-primary">{{lastResponseFrom}}</span>
           {{/if}}
         </span>
         <span class="visitor-visibility pull-right">

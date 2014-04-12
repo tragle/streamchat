@@ -3,6 +3,9 @@
 /*****************************************************************************/
 Template.Header.events({
   'click #logout': function() {
+    if (Session.get('currentGroup')) {
+      Meteor.call('leaveGroup', Session.get('currentGroup'), Meteor.userId());
+    }
     Meteor.logout();
   }
 });

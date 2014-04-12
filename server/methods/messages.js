@@ -7,7 +7,7 @@ Meteor.methods({
     return Messages.insert(message);
   },
   sendSystemMessage: function(groupId, body, type, to) {
-    var message = new App.Message();
+    var message = new Models.Message();
     message.senderName = 'System';
     message.group = groupId;
     message.body = body;

@@ -5,7 +5,7 @@
 Template.AgentInput.events({
   'submit #agent-input-form': function(e) {
     e.preventDefault();
-    var message = new App.Message();
+    var message = new Models.Message();
     var agent = Meteor.user();
     message.body = $('#agent-input-message').val();
     message.body = message.body.trim();
@@ -29,6 +29,10 @@ Template.AgentInput.events({
     if (e.which == 13) {
       $('#agent-input-form').submit();
     }
+    if (e.which == 27) {
+      Session.set('sendTo', '');
+      Session.set('chatFocus', '');
+    }
     if ($('#agent-input-message').val() && Session.get('sendTo')) {
       Session.set('chatFocus', Session.get('sendTo'));
     }
@@ -38,6 +42,10 @@ Template.AgentInput.events({
       Session.set('chatFocus', null);
       Session.set('typingMessage', '')
     }
+  },
+  'click #agent-input': function(e) {
+//    e.stopPropagation();
+//    Session.set('sendTo', '');
   }
 });
 
@@ -55,7 +63,9 @@ Deps.autorun(function() {
   var name = '';
   if (id) {
     var user = Meteor.users.findOne(id);
-    name = user.profile.displayName;
+    if (user && user.profile) {
+      name = user.profile.displayName;
+    }
   }
   Session.set('chatFocusName', name);
 });

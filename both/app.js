@@ -3,36 +3,6 @@
 /*****************************************************************************/
 App = {};
 
-App.Group = function() {
-  this.name = '';
-  this.isFixed = false;
-  this.maxPerAgent = 0;
-  this.maxAgents = 0;
-  this.maxQueue = 0;
-};
-
-App.Message = function() {
-  this.group = '';
-  this.from = '';
-  this.to = '';
-  this.body = '';
-  this.senderName = '';
-  this.recipientName = '';
-  this.isVisitor = false;
-  this.isDraft = false;
-  this.date = new Date;
-  this.expired = null;
-};
-
-App.User = function() {
-  this.username = '';
-  this.profile = {
-    displayName: '',
-    fixedGroup: '',
-    isVisitor: ''
-  };
-};
-
 App.isAdmin = function(id) {
   return Roles.userIsInRole(id, ['admin'], 'permissions');
 };
@@ -70,7 +40,10 @@ App.flashResult = function(error, id) {
 
 App.scrollToBottom = function(element) {
   setTimeout(function() {
-    $(element).scrollTop($(element)[0].scrollHeight);},
-    50);
+    if ($(element)) {
+      $(element).scrollTop($(element)[0].scrollHeight);
+    }
+  },
+  50);
 };
 

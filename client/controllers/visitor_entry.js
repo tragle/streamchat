@@ -5,7 +5,11 @@ VisitorEntryController = RouteController.extend({
 
   layoutTemplate: 'VisitorEntry',
 
-  data: function () {
+  data: function() {
+    var params = this.params;
+    if (params.reason && params.reason =='nogroup') {
+      return {noGroup: true};
+    }
   },
 
   action: function () {

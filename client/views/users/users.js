@@ -4,7 +4,7 @@
 Template.Users.events({
   'click #add-user': function(e) {
     e.preventDefault();
-    var user = new App.User();
+    var user = new Models.User();
     user.profile.displayName = $('#add-user-name').val();
     user.username = $('#add-user-username').val();
     var permissions = $('#add-user-permissions').val().split(' ');

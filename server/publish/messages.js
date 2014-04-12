@@ -9,3 +9,6 @@ Meteor.publish('messages', function (groupId) {
   return Messages.find({group: groupId});
 });
 
+Meteor.publish('previews', function(groupId) {
+  return Previews.find({'group': groupId});
+});

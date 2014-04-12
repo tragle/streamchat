@@ -1,6 +1,6 @@
 Meteor.startup(function() {
   if (!Meteor.users.findOne({'username':'admin'})) {
-    var admin = new App.User();
+    var admin = new Models.User();
     admin.username = 'admin';
     admin.email = 'email'; 
     admin.password = 'password';

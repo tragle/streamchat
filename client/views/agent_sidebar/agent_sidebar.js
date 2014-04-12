@@ -4,7 +4,7 @@
 Template.AgentSidebar.events({
   'click .visitor-mute': function(e) {
     e.stopPropagation();
-    var userId = this.userId;
+    var userId = this._id;
     if (Filters.isMute(userId)) {
       Filters.unMute(userId);
     } else {
@@ -13,7 +13,7 @@ Template.AgentSidebar.events({
   },
   'click .visitor-solo': function(e) {
     e.stopPropagation();
-    var userId = this.userId;
+    var userId = this._id;
     if (Filters.isSolo(userId)) {
       Filters.unSolo(userId);
     } else {
@@ -22,7 +22,7 @@ Template.AgentSidebar.events({
   },
   'click .visitor-channel': function(e) {
     e.preventDefault();
-    Session.set('sendTo', this.userId);
+    Session.set('sendTo', this._id);
   }
 });
 

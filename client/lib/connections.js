@@ -1,6 +1,6 @@
 Meteor.setInterval(function() {
-  if (Meteor.user()) {
-    Meteor.call('keepalive');
+  if (Meteor.user() && Session.get('currentGroup')) {
+    Meteor.call('keepAlive', Session.get('currentGroup'));
   }
 }, 1000);
 
@@ -16,19 +16,25 @@ Deps.autorun(function() {
     state.skills = Meteor.user().roles.skills ? Meteor.user().roles.skills : [];
     state.displayName = Meteor.user().profile.displayName;
     state.updated = (new Date()).getTime() 
-    Meteor.call('updateState', state);
+    Meteor.call('updateState', state.currentGroup, state);
   }
 });
 
 Deps.autorun(function() {
   var typingMessage = Session.get('typingMessage');
-  Meteor.call('setTyping', typingMessage);
+  Meteor.call(
+    'setTyping', 
+    Session.get('currentGroup'), 
+    Session.get('typingMessage'), 
+    Session.get('chatFocusName'),
+    Session.get('sendTo')
+  );
 });
 
 Deps.autorun(function() {
   if (!Meteor.user()) {
-    for (var p in Session) {
-      Session.set(p, null);
+    for (var key in Session.keys) {
+      Session.set(key, '');
     }
   }
 });
