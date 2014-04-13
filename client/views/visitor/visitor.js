@@ -69,6 +69,35 @@ Deps.autorun(function() {
 
 
 
+
+/*
+   Groups.find({'_id': Session.get('currentGroup')}).observe({
+changed: function(group, old) {
+var id = Meteor.userId();
+if (!group.connections[id] || !group.queue[id]) {
+var newGroup = Groups.findOne({
+$or: [
+{'connection._id': id},
+{'queue._id': id}
+]});
+Session.set('currentGroup', newGroup);
+}
+},
+removed: function() {
+var id = Meteor.userId();
+var newGroup = Groups.findOne({
+$or: [
+{'connection._id': id},
+{'queue._id': id}
+]});
+Session.set('currentGroup', newGroup);
+}
+});
+
+*/
+
+
+
 /*****************************************************************************/
 /* Visitor: Lifecycle Hooks */
 /*****************************************************************************/
@@ -82,4 +111,5 @@ Template.Visitor.destroyed = function () {
 };
 
 Template.visitorChatlog.destroyed = function () {
+  Router.go('visitor.entry');
 };;

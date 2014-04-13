@@ -27,12 +27,21 @@ Meteor.methods({
       }
     }
   },
-  keepAlive: function(groupId) {
-    if (this.userId && groupId) {
-      return Groups.update(
-        {'_id': groupId, 'connections._id': this.userId},  
-        {$set: {'connections.$.updated': (new Date()).getTime()}}
-      );
+  keepAlive: function() {
+    if (this.userId) {
+      if (Groups.findOne({'connections._id': this.userId})) {
+        return Groups.update(
+          {'connections._id': this.userId},  
+          {$set: {'connections.$.updated': (new Date()).getTime()}}
+        );
+      } else if (Groups.findOne({'queue._id': this.userId})) {
+        return Groups.update(
+          {'queue._id': this.userId},  
+          {$set: {'queue.$.updated': (new Date()).getTime()}}
+        );
+      } else {
+        return null;
+      }
     }
   },
   setTyping: function(groupId, message, toName, toId) {

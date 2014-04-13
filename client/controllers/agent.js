@@ -3,7 +3,7 @@ AgentController = RouteController.extend({
     Meteor.subscribe('messages', Session.get('currentGroup'));
     Meteor.subscribe('previews', Session.get('currentGroup'));
     Meteor.subscribe('visitors');
-    Meteor.subscribe('groups');
+    Meteor.subscribe('groups', Session.get('currentGroup'));
   },
 
   data: {
@@ -77,11 +77,6 @@ AgentController = RouteController.extend({
   },
 
   onRun: function() {
-    if (!Session.get('currentGroup')) {
-      if (Meteor.user() && Meteor.user().profile.fixedGroup) {
-        Session.set('currentGroup', Meteor.user().profile.fixedGroup);
-      }
-    }
   },
   /*if (!Session.get('currentGroup')) {
     if (Meteor.user() && Meteor.user().profile.fixedGroup) {

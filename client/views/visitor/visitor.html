@@ -19,7 +19,8 @@
 <div id="visitor-chatlog">
   <div>
     {{#if inQueue}}
-    An agent will be with you soon. Please wait.
+    <span class="wait-message">An agent will be with you soon. Please
+      wait.</span>
     {{/if}}
     {{#each messages}}
     <div><b>{{senderName}}</b> {{body}}</div>
@@ -31,9 +32,8 @@
 <template name="visitorControls">
 <form class="form-inline" id="visitor-chat-controls" role="form">
   <div class="form-group">
-    <input type="text" class="form-control" id="visitor-chat-input"
-    {{inputState}}  placeholder="Message" autofocus>
+    <input {{inputState}} type="text" class="form-control" id="visitor-chat-input" placeholder="Message" autofocus>
   </div>
-  <button type="submit" {{inputState}} class="btn btn-primary" id="visitor-chat-send">Send</button>
+  <button {{inputState}} type="submit" class="btn btn-primary" id="visitor-chat-send">Send</button>
 </form>
 </template>

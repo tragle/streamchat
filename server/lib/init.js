@@ -9,7 +9,7 @@ Meteor.startup(function() {
     Roles.setUserRoles(id, ['admin','agent'], 'permissions');
   }
   if (!AutoGroupSettings.findOne()) {
-    AutoGroupSettings.insert({'maxAgents': 1, 'maxQueue': 0, 'groupSkills': false});
+    AutoGroupSettings.insert({'maxAgents': 1, 'maxAgentVisitors':0, 'maxQueue': 0, 'groupSkills': false});
   }
 });
 

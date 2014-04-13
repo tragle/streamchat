@@ -1,9 +1,3 @@
-Meteor.setInterval(function() {
-  if (Meteor.user() && Session.get('currentGroup')) {
-    Meteor.call('keepAlive', Session.get('currentGroup'));
-  }
-}, 1000);
-
 Deps.autorun(function() {
   var state = {};
   if (Meteor.user()) {
@@ -38,3 +32,15 @@ Deps.autorun(function() {
     }
   }
 });
+
+Meteor.setInterval(function() {
+  if (Meteor.user()) {
+    Meteor.call('keepAlive', function(error, success) {
+      if (!success && App.isVisitor(Meteor.userId())) {
+        Meteor.logout();
+      }
+    });
+  }
+}, 1000);
+
+

@@ -32,6 +32,8 @@ Meteor.methods({
     var userId = this.userId;
     if (userId && groupId) {
       console.log(userId + ' joining group ' + groupId);
+      Groups.update({'connections._id': userId}, {$pull: {'connections': {'_id': userId}}});
+      Groups.update({'queue._id': userId}, {$pull: {'queue': {'_id': userId}}});
       var group = Groups.findOne(groupId);
       var visitorHeadroom = Meteor.call('getVisitorHeadroom', groupId);
       if (!group) return;
@@ -68,6 +70,7 @@ Meteor.methods({
   },
   getVisitorHeadroom: function(groupId) {
     var group = Groups.findOne(groupId);
+    var settings = AutoGroupSettings.findOne();
     var headroom;
     var maxAgentVisitors;
     if (group.isFixed) {
@@ -75,68 +78,60 @@ Meteor.methods({
     } else {
       maxAgentVisitors = settings.maxAgentVisitors || 0;
     }
-    console.log('max agent visitors ' + maxAgentVisitors);
     var visitors = _.filter(group.connections, function(user) {
       return !!user.isVisitor;
     });
     var numVisitors = visitors.length;
     var numAgents = group.connections.length - visitors.length;
-    console.log('visitors: ' + numVisitors);
-    console.log('agents: ' + numAgents);
     headroom = (maxAgentVisitors * numAgents) - numVisitors; 
-    console.log(headroom);
     return headroom;
   },
   getQueueHeadroom: function(groupId) {
     var group = Groups.findOne(groupId);
+    var settings = AutoGroupSettings.findOne();
     var headroom;
     if (group.isFixed) {
       maxQueue = group.maxQueue || 0;
     } else {
-      maxQueue = group.maxQueue || 0;
+      maxQueue = settings.maxQueue || 0;
     }
     var queueDepth = group.queue.length || 0;
     headroom = maxQueue - queueDepth;
     return headroom;
   },
   routeVisitor: function(skill) {
-    if (!skill) return;
+    console.log('Routing ' + this.userId + ' to skill ' + skill);
     var foundId = '';
-    var settings = AutoGroupSettings.findOne();
     var groups = Groups.find({ 'connections.skills': {$in: [skill]}}).map(function(group) {
       var skilledAgents = _.filter(group.connections, function(user) {
         return _.contains(user.skills, skill);
       });
       var headroom = Meteor.call('getVisitorHeadroom', group._id);
-      console.log('skills ' + skilledAgents.length);
-      console.log('headroom ' + headroom);
       group.points = 0;
       group.ponts += skilledAgents.length || 0;
       group.points += headroom || 0;
       group.queueSlots = Meteor.call('getQueueHeadroom', group._id);
-      console.log('queueSlots ' + group.queueSlots);
-      group.fullGroup = !!(headroom + group.queueSlots <= 0);
-      console.log('full ' + group.fullGroup);
+      group.fullGroup = !!((headroom + group.queueSlots <= 0) || skilledAgents.length <= 0);
       return group;
     });
-    _.reject(groups, function(group) {return !!group.fullGroup;});
-    if (!groups) return;
-    console.log('Routing ' + this.userId + ' to skill ' + skill);
-    var pointsTable = _.groupBy(groups, function(group) {return group.points;});
-    var topScore = _.max(_.keys(pointsTable));
-    var topGroups = [];
-    if (topScore) {
-      topGroups = pointsTable[topScore];
-    } 
-    if (topGroups && topGroups.length) {
-      if (topGroups.length > 1) {
-        var queueSlotsTable = _.groupBy(topGroups, function(group) {return group.queueSlots;});
-        var bestQueue = _.max(_keys(queueSlotsTable));
-        if (queueSlotsTable[bestQueue]) {
-          foundId = queueSlotsTable[bestQueue]._id;
+    groups = _.reject(groups, function(group) {return !!group.fullGroup;});
+    if (groups) {
+      var pointsTable = _.groupBy(groups, function(group) {return group.points;});
+      var topScore = _.max(_.keys(pointsTable));
+      var topGroups = [];
+      if (topScore) {
+        topGroups = pointsTable[topScore];
+      } 
+      if (topGroups && topGroups.length) {
+        if (topGroups.length > 1) {
+          var queueSlotsTable = _.groupBy(topGroups, function(group) {return group.queueSlots;});
+          var bestQueue = _.max(_keys(queueSlotsTable));
+          if (queueSlotsTable[bestQueue]) {
+            foundId = queueSlotsTable[bestQueue]._id;
+          }
+        } else {
+          foundId = topGroups[0]._id;
         }
-      } else {
-        foundId = topGroups[0]._id;
       }
     }
     if (foundId) console.log('Found group: ' + foundId);
@@ -147,45 +142,52 @@ Meteor.methods({
     App.checkIsAdmin(this.userId);
     return AutoGroupSettings.upsert({}, {$set: {'maxAgents': maxAgents, 'maxAgentVisitors': maxAgentVisitors, 'maxQueue': maxQueue, 'groupSkills': groupSkills}});
   },
-  findAutoGroup: function() {
+  routeAgent: function() {
     App.checkIsAgent(this.userId);
+    console.log('Routing agent ' + this.userId + ' to group.');
+    var foundGroup = '';
     var user = Meteor.users.findOne({'_id': this.userId});
-    var settings = AutoGroupSettings.findOne();
-    var maxAgents = settings.maxAgents;
-    // get autogroups
-    var groups = Groups.find({
-      'isFixed': false
-    }).map(function(group) {
-      group.score = 0;
-      var agents = Connections.find({'isVisitor': false, 'currentGroup': group._id});
-      if (settings.groupSkills) {
-        agents.forEach(function(agent) {
-          // give 1 point for each matching skill
-          var sameSkills = _.intersection(agent.skills, user.skills);
-          group.score += sameSkills.length;
-        });
-      }
-      // give 1 point for each available slot
-      var headroom = maxAgents - agents.count();
-      if (headroom <= 0) {
-        group.isFull = true;
-      }
-      group.score += headroom;
-      // give 1 point for each visitor in queue
-      var queue = Connections.find({'isVisitor': true, 'currentGroup': group._id, 'queued': true});
-      group.score += queue.count();
-      return group;
-    });
-    // remove groups already full of agents
-    var availableGroups = _.reject(groups, function(group) { return group.isFull == true;});
-    console.log(availableGroups);
-    if (availableGroups.length) {
-      return availableGroups[0]._id;
+    if (user.profile && user.profile.fixedGroup) {
+      console.log('Agent belongs to a fixed group.');
+      foundGroup = user.profile.fixedGroup; 
     } else {
-      return Meteor.call('addAutoGroup');
+      var settings = AutoGroupSettings.findOne();
+      var maxAgents = settings.maxAgents;
+      var groups = Groups.find({
+        'isFixed': false
+      }).map(function(group) {
+        group.score = 0;
+        var agents = _.filter(group.connections, function(user) {return user.isVisitor == false;});
+        if (settings.groupSkills) {
+          agents.forEach(function(agent) {
+            var sameSkills = _.intersection(agent.skills, user.skills);
+            group.score += sameSkills.length;
+          });
+        }
+        var headroom = maxAgents - agents.length;
+        if (headroom <= 0) {
+          group.isFull = true;
+        }
+        group.score += headroom;
+        group.score += group.queue.length;
+        return group;
+      });
+      var availableGroups = _.reject(groups, function(group) { return group.isFull == true;});
+      if (availableGroups.length) {
+        foundGroup = availableGroups[0]._id;
+      } else {
+        foundGroup = Meteor.call('addAutoGroup');
+      }
     }
+    if (foundGroup) {
+      console.log('Found group ' + foundGroup);
+    } else {
+      console.log('No group found.');
+    }
+    return foundGroup;
   },
   addAutoGroup: function() {
+    console.log('Adding autogroup');
     var group = new Models.Group();
     var autoGroupCount = Groups.find({'isFixed': false}).count();
     group.name = 'autogroup ' + ++autoGroupCount;

@@ -1,6 +1,6 @@
 VisitorController = RouteController.extend({
   waitOn: function () {
-    Meteor.subscribe('groups');
+    Meteor.subscribe('groups', Session.get('currentGroup'));
   },
 
   layoutTemplate: 'Visitor',
@@ -21,10 +21,10 @@ VisitorController = RouteController.extend({
   },
 
   onStop: function() {
-            /*    if (Session.get('currentGroup')) {
-                  Meteor.call('leaveGroup', Session.get('currentGroup'));
-                  }
-                  */
-  }
+    /*    if (Session.get('currentGroup')) {
+          Meteor.call('leaveGroup', Session.get('currentGroup'));
+          }
+          */
+          }
 });
 
