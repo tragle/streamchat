@@ -3,7 +3,7 @@
 /*****************************************************************************/
 #agent-chatlog {
     position: fixed;
-    bottom: 80px;
+    bottom: 90px;
     top: 50px;
     left: 0;
     right: 250px;
@@ -15,6 +15,11 @@
 
 .message {
     font-size: 14pt;
+    margin-right: 200px;
+}
+
+.message .body {
+  text-align: justify;
 }
 
 .sender {
@@ -22,7 +27,40 @@
     margin-right: 10px;
 }
 
-.expired {
+.message-preview {
+  padding-left: 18px;
+}
+
+.message.expired {
   font-style: italic;
 }
 
+.message.draft {
+  border: 1px dashed red;
+  border-radius: 3px;
+  padding: 3px;
+  margin: 5px 0;
+  background: lightyellow;
+}
+
+.draft-controls {
+  font-size: 10pt;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.message-shortcut-add {
+  font-size: 8pt;
+  margin-right: 3px;
+  opacity: 0;
+  width: 5px;
+}
+
+.message-shortcut-new {
+  padding: 3px;
+}
+
+.message-shortcut-new input {
+  margin-bottom: 5px;
+}

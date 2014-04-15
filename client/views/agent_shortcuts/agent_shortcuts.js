@@ -2,16 +2,7 @@
 /* AgentShortcuts: Event Handlers and Helpers */
 /*****************************************************************************/
 Template.AgentShortcuts.events({
-  'click .agent-shortcuts-add a': function(e) {
-    e.preventDefault();
-    var text = $('#agent-input-message').val();
-    if (text) {
-      var shortcut = new Models.Shortcut();
-      shortcut.body = text.trim();
-      shortcut.author = Meteor.userId();
-      Shortcuts.insert(shortcut);
-    }
-  },
+  
   'click .agent-shortcut-body': function(e) {
     e.preventDefault();
     var shortcut = this.body;

@@ -6,6 +6,9 @@ Meteor.methods({
   sendMessage: function(message) {
     return Messages.insert(message);
   },
+  removeDraft: function(messageId) {
+    return Messages.update({'_id': messageId}, {$set: {isDraft: false}});
+  },
   sendSystemMessage: function(groupId, body, type, to) {
     var message = new Models.Message();
     message.senderName = 'System';

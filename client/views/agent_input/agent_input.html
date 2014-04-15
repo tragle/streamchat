@@ -2,6 +2,13 @@
 <div id="agent-input">
   <form class="form-inline" id="agent-input-form" role="form">
     <div class="form-group">
+      <span class="agent-input-tools">
+        <a href="#" class="agent-shortcuts-add"><span class="glyphicon glyphicon-plus"></span></a>
+        <a href="#" class="agent-input-draft"><span class="glyphicon glyphicon-asterisk"></span></a>
+        {{#if isDraft}}
+        <span class="agent-input-draft-indicator">DRAFT</span>
+        {{/if}}
+      </span>
       <textarea class="form-control" rows="2" id="agent-input-message" placeholder="message" autofocus></textarea>
     </div>
     <button type="submit" class="btn btn-default" id="agent-input-send">

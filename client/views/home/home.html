@@ -3,4 +3,66 @@
   <h1>streamchat</h1>
   <p>team-oriented service</p>
 </div>
+<div class="container">
+  <div class="lead">
+    Streamchat is a chat system designed around the idea that <em>teamwork</em> is a better strategy for service. 
+  </div>
+  <hr>
+  <h3>How it works</h3>
+  <div class="lead">
+    <ol>
+      <li>Agents and visitors chat in <b>groups</b>.</li>
+      <li>A group is just like a chatroom, except visitors only see messages directed at them (and their own).</li>
+      <li>Agents discuss anything they want with their peers in the group using a specialized interface. They can suggest responses, coordinate activities, ask for help &mdash; everything you do in a team.</li>
+      <li>Groups can be created manually, generated on the fly, or a mixture of both.</li>
+      <li>Routing is flexible and skill-based. See below.</li>
+    </ol> 
+  </div>
+  <hr>
+  <div id="agent-ui">
+    <h3>Agent interface</h3>
+    <p>The agent interface is clean, ergnonmic, and fast. Some features:</p>
+    <ul>
+      <li><b>Visitor channel strips</b> showing which agent is handling which visitor and which visitors are waiting on responses.</li>
+      <li><b>Solo and Mute buttons</b> on each channel strip, for manually soloing or hiding conversations.</li>
+      <li><b>Dual-mode input</b> allows easy switching between sending messages to the group or to a visitor.</li>
+      <li><b>Autofocus</b> hides messages in other conversations when a message is being composed to a visitor.</li>
+      <li><b>Shortcuts</b> to commonly-used responses.</li>
+      <li><b>Full typing previews</b> in real time, from both visitors and agents.</li>
+    </ul>
+  </div>
+  <div id="routing">
+    <h3>Routing</h3>
+    <p>There are two routing algorithms, one for routing <em>agents to groups</em> and another for routing <em>visitors to groups</em>. They are actually pretty similar.</p>
+    <h4>Agent routing</h4>
+    <ol>
+      <li>If the agent is assigned to a fixed group, route her to that group. Otherwise, look at the autogroups.</li>
+      <li>Are we grouping agents by skill? If so, get all the groups with at least one agent that has one of her skills.</li>
+      <li>Assign points for matching skills and headroom (slots available before the group is full of agents).</li>
+      <li>Discard any groups that are too full to take any more agents.</li>
+      <li>Is there a clear winner? If so, router her to that group.</li>
+      <li>If there's a tie, look at the visitor queue of each group, and route her to the group with the fullest queue.</li>
+      <li>Are there still no groups to route to? Then create a new autogroup and route her to that one.</li>
+    </ol>
+    <h4>Visitor routing</h4>
+    <ol>
+      <li>If the visitor specifies a certain fixed group, route her to that group.</li>
+      <li>Get all the groups with at least one agent who has a skill that matches the visitor's issue.</li> 
+      <li>Assign points for agents matching this skill and visitor headroom (slots available before visitors enter the queue).</li>
+      <li>Discard any groups that have full queues.</li> 
+      <li>Is there a clear winner? If so, route the visitor to that queue.</li>
+      <li>If there's a tie, look at the visitor queue of each group and route to the group with the least full queue.</li>
+      <li>If there are still no groups to route to, present an alternate mode of contact.</li>
+    </ol>
+  </div>
+  <div id="administration">
+    <h3>Administration</h3>
+    <p>Admin users create other users and specify how chats are routed.</p> 
+    <ul>
+      <li>They assign one or more skills to each agent to determine which visitors are routed to them.</li>
+      <li>They create fixed groups if they want certain agents to always be together, or if certain customers should be handled in a special way.</li>
+      <li>Aside from that, 4 settings shape the system: how many visitors an agent can chat with; how large queues can be; how many agents can be in one group; and whether to group agents with similar skills. Admins control these settings, and they can adjust them on the fly as needed.</li>
+    </ul>
+  </div>
+</div>
 </template>

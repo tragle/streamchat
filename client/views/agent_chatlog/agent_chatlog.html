@@ -2,17 +2,23 @@
 <div id="agent-chatlog">
   {{#if currentGroup}}
   {{#each messages}}
-  <div class="message {{#if expired}}text-info expired{{/if}}">
+  <div class="message {{#if isDraft}}draft{{/if}} {{#if expired}}text-info expired{{/if}}">
+    <a class="message-shortcut-add float-left"><span class="glyphicon glyphicon-plus"></span></a>
     <span class="sender">{{senderName}} {{#if recipientName}}
       > {{recipientName}} 
       {{/if}}  
     </span>
     <span class="body">{{body}}</span>
+    {{#if isDraft}}
+    <p class="draft-controls">
+      <a class="send-draft" href="#">Send</a>
+    </p>
+    {{/if}}
   </div>
   {{/each}}
   {{#each previews}}
   {{#if body}}
-  <div class="message text-muted">
+  <div class="message message-preview text-muted">
     <span class="sender">{{displayName}} {{#if to}} >
       {{to}} {{/if}}</span> <span class="body">{{body}}</span>
   </div>

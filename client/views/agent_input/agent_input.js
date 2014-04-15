@@ -9,6 +9,7 @@ Template.AgentInput.events({
     var agent = Meteor.user();
     message.body = $('#agent-input-message').val();
     message.body = message.body.trim();
+    if (Session.get('isDraft')) message.isDraft = true;
     if (message.body) {
       message.group = Session.get('currentGroup');
       message.from =  Meteor.userId();
@@ -46,6 +47,36 @@ Template.AgentInput.events({
   },
   'click button#agent-shortcuts': function(e) {
     e.preventDefault();
+  },
+  'click a.agent-shortcuts-add': function(e) {
+    e.preventDefault();
+    $('a.agent-shortcuts-add').popover();
+    $('form.agent-shortcuts-new').on('submit', function(evt) {
+      evt.preventDefault();
+      var text = $('#agent-input-message').val();
+      if (text) {
+        var shortcut = new Models.Shortcut();
+        shortcut.body = text.trim();
+        shortcut.owner = Meteor.userId();
+        shortcut.isPublic = $('#agent-shortcuts-add-public').is(':checked');
+        if ($('#agent-shortcuts-add-tags').val()) {
+          shortcut.tags = $('#agent-shortcuts-add-tags').val().split(' ');
+          Shortcuts.insert(shortcut);
+          $('a.agent-shortcuts-add').popover('hide');
+          $('#agent-input-message').val('');
+          $('#agent-input-message').trigger('keyup');
+        }
+      }
+      $('form.agent-shortcuts-new').off('submit');
+    });
+  },
+  'click .agent-input-draft': function(e) {
+    e.preventDefault();
+    if (Session.get('isDraft')) {
+      Session.set('isDraft', null)
+    } else {
+      Session.set('isDraft', true);
+    }
   }
 });
 
@@ -81,6 +112,20 @@ Template.AgentInput.created = function () {
 };
 
 Template.AgentInput.rendered = function () {
+  var options = {};
+  options.container = 'body';
+  options.placement = 'top';
+  options.html = true;
+  options.content = '\
+  <form class="form-inline agent-shortcuts-new"> \
+  <div class="form-group"> \
+  <input type="text" class="form-control input-sm" id="agent-shortcuts-add-tags" required placeholder="tags"></div> \
+  <div class="form-group"> \
+  <input type="checkbox" class="checkbox" checked id="agent-shortcuts-add-public">\
+  <label for="agent-shortcuts-add-public"><small>Public?</small></label></div> \
+  <button type="submit" class="btn btn-default btn-sm" id="agent-shortcuts-submit">add shortcut</button> \
+  </form>';
+  $('.agent-shortcuts-add').popover(options);
 };
 
 Template.AgentInput.destroyed = function () {

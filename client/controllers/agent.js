@@ -44,6 +44,9 @@ AgentController = RouteController.extend({
           return !user.isVisitor;
         });
       }
+    },
+    isDraft: function() {
+      return !!Session.get('isDraft');
     }
     /*
        return Connections.find({

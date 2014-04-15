@@ -5,13 +5,8 @@
 font-size: 10pt;
 }
 
-.agent-shortcuts-add {
-  text-align: right;
-}
-
 .agent-shortcut-controls {
+  opacity: 0;
   text-align: right;
   font-size: 8pt;
-  opacity: 0;
 }
-
