@@ -15,10 +15,7 @@ Template.AgentInput.events({
       message.senderName = agent.profile.displayName;
       if (Session.get('sendTo')) {
         message.to = Session.get('sendTo');
-        var visitor = Meteor.users.findOne({'_id': message.to});
-        if (visitor && visitor.profile) {
-          message.recipientName = visitor.profile.displayName;
-        }
+        message.recipientName = Groups.getDisplayName(Session.get('sendTo'));
       }
       Meteor.call('sendMessage', message);
       Session.set('typingMessage', '');
@@ -44,8 +41,11 @@ Template.AgentInput.events({
     }
   },
   'click #agent-input': function(e) {
-//    e.stopPropagation();
-//    Session.set('sendTo', '');
+    //    e.stopPropagation();
+    //    Session.set('sendTo', '');
+  },
+  'click button#agent-shortcuts': function(e) {
+    e.preventDefault();
   }
 });
 
@@ -62,10 +62,7 @@ Deps.autorun(function() {
   var id = Session.get('chatFocus');
   var name = '';
   if (id) {
-    var user = Meteor.users.findOne(id);
-    if (user && user.profile) {
-      name = user.profile.displayName;
-    }
+    name = Groups.getDisplayName(id);
   }
   Session.set('chatFocusName', name);
 });

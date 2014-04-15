@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* Bookmarks: Event Handlers and Helpers */
+/* Shortcuts: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.Bookmarks.events({
+Template.Shortcuts.events({
   /*
    * Example: 
    *  'click .selector': function (e, tmpl) {
@@ -10,7 +10,7 @@ Template.Bookmarks.events({
    */
 });
 
-Template.Bookmarks.helpers({
+Template.Shortcuts.helpers({
   /*
    * Example: 
    *  items: function () {
@@ -20,13 +20,13 @@ Template.Bookmarks.helpers({
 });
 
 /*****************************************************************************/
-/* Bookmarks: Lifecycle Hooks */
+/* Shortcuts: Lifecycle Hooks */
 /*****************************************************************************/
-Template.Bookmarks.created = function () {
+Template.Shortcuts.created = function () {
 };
 
-Template.Bookmarks.rendered = function () {
+Template.Shortcuts.rendered = function () {
 };
 
-Template.Bookmarks.destroyed = function () {
+Template.Shortcuts.destroyed = function () {
 };

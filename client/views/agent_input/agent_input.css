@@ -3,32 +3,37 @@
 /*****************************************************************************/
 
 #agent-input-message, #agent-input-send, #agent-bookmarks {
-    height: 50px;
+  height: 50px;
 }
 
 #agent-input {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 80px;
-    background: #f5f5f5;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 80px;
+  right: 250px;
+  background: #f5f5f5;
 }
 
 #agent-input-form {
-    padding: 5px;
-    margin:10px;
+  padding: 5px;
+  margin:10px;
 }
 
 #agent-input-message {
-    width: 500px;
-    resize: none;
+  width: 500px;
+  resize: none;
 }
 
 #agent-input-send {
-    width: 100px;
+  width: 100px;
 }
 
 #agent-bookmarks {
   position:fixed;
   right: 20px;
+}
+
+.popover {
+  max-width: 600px;;
 }

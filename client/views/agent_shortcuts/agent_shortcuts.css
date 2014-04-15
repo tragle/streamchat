@@ -1,0 +1,17 @@
+/*****************************************************************************/
+/* AgentShortcuts: Style */
+/*****************************************************************************/
+#agent-shortcuts {
+font-size: 10pt;
+}
+
+.agent-shortcuts-add {
+  text-align: right;
+}
+
+.agent-shortcut-controls {
+  text-align: right;
+  font-size: 8pt;
+  opacity: 0;
+}
+

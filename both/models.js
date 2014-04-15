@@ -27,7 +27,8 @@ Models.User = function() {
   this.username = '';
   this.profile = {
     displayName: '',
-    fixedGroup: ''
+    fixedGroup: '',
+    shortcuts: []
   };
   this.roles = {
     skills: [],
@@ -35,4 +36,8 @@ Models.User = function() {
   };
 };
 
-
+Models.Shortcut = function() {
+  this.author = '';
+  this.body = '';
+  this.skills = [];
+};

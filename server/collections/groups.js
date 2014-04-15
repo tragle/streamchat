@@ -47,6 +47,5 @@ Groups.find().observe({
        Meteor.call('leaveGroup', user._id);
        });
        */
-    console.log(old);
   }
 });

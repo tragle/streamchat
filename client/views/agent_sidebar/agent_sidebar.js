@@ -44,6 +44,7 @@ Template.AgentSidebar.created = function () {
 };
 
 Template.AgentSidebar.rendered = function () {
+  $('#agent-sidebar .nav a:last').tab('show');
 };
 
 Template.AgentSidebar.destroyed = function () {

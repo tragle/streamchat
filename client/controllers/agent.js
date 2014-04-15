@@ -2,8 +2,8 @@ AgentController = RouteController.extend({
   waitOn: function () {
     Meteor.subscribe('messages', Session.get('currentGroup'));
     Meteor.subscribe('previews', Session.get('currentGroup'));
-    Meteor.subscribe('visitors');
     Meteor.subscribe('groups', Session.get('currentGroup'));
+    Meteor.subscribe('shortcuts');
   },
 
   data: {

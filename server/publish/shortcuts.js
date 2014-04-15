@@ -1,8 +1,7 @@
 /*****************************************************************************/
-/* Users Publish Functions
+/* Shortcuts Publish Functions
 /*****************************************************************************/
 
-Meteor.publish('users', function () {
-  return Meteor.users.find();
+Meteor.publish('shortcuts', function () {
+  return Shortcuts.find();
 });
- 
