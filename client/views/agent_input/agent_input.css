@@ -27,8 +27,12 @@
 }
 
 #agent-input-send {
-  width: 100px;
+  width: 150px;
   margin-top: 10px;
+}
+
+.agent-input-button-text {
+  white-space: normal;
 }
 
 #agent-bookmarks {

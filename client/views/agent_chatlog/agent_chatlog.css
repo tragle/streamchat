@@ -1,33 +1,73 @@
 /*****************************************************************************/
 /* AgentChatlog: Style */
 /*****************************************************************************/
+
+
 #agent-chatlog {
-    position: fixed;
-    bottom: 90px;
-    top: 50px;
-    left: 0;
-    right: 250px;
-    border-right: 3px solid #f0f0f0;
-    border-bottom: 3px solid #f0f0f0;
-    overflow-y:auto;
-    padding: 2px 20px;
+  position: fixed;
+  bottom: 90px;
+  top: 50px;
+  left: 0;
+  right: 250px;
+  border-right: 3px solid #f0f0f0;
+  border-bottom: 3px solid #f0f0f0;
+  overflow-y:auto;
+  padding: 2px 20px;
 }
 
 .message {
-    font-size: 14pt;
-    margin-right: 200px;
+  font-size: 12pt;
+  margin-bottom: 10px;
+}
+
+.agent.message {
+  margin-right: 200px;
+}
+
+.visitor.message {
+  margin-left: 200px;
+  text-align: right;
 }
 
 .message .body {
-  text-align: justify;
+  display: inline-block;
+  max-width: 300px;
+  padding: 6px 12px;
+  border: lightgray 1px solid;
+  border-radius: 3px;
+  text-align: left;
+  background: white;
+}
+
+.agent.message .body {
+  margin-right: 0;
+  background: GhostWhite;
+}
+
+.visitor.message .body {
+  background: FloralWhite;
 }
 
 .sender {
-    font-weight: bold;
-    margin-right: 10px;
+  display: inline-block;
+  vertical-align: top;
+  font-weight: bold;
+  padding: 4px;
+}
+
+.agent.message .sender {
+  margin-right: 5px;
+}
+
+.visitor.message .sender {
+  margin-left: 5px;
 }
 
 .message-preview {
+  /*  padding-left: 18px;*/
+}
+
+.agent.message-preview {
   padding-left: 18px;
 }
 
@@ -49,13 +89,24 @@
   margin-right: 10px;
   margin-top: 5px;
 }
-
 .message-shortcut-add {
   font-size: 8pt;
-  margin-right: 3px;
+  margin-top: 5px;
   opacity: 0;
   width: 5px;
+  display: inline-block;
+  vertical-align: top;
 }
+
+.message.agent .message-shortcut-add {
+  margin-right: 3px;
+}
+
+.message.visitor .message-shortcut-add {
+  margin-left: 3px;
+}
+
+
 
 .message-shortcut-new {
   padding: 3px;

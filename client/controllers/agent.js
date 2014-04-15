@@ -12,10 +12,7 @@ AgentController = RouteController.extend({
     },
     sendTo: function() {
       var id = Session.get('sendTo');
-      var user = Meteor.users.findOne(id);
-      if (user && user.profile) {
-        return user.profile.displayName;
-      } 
+      return Groups.getDisplayName(id);
     },
     groupVisitors: function() {
       var group = Groups.findOne(Session.get('currentGroup'));

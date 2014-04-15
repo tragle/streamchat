@@ -6,12 +6,12 @@
   <ul class="list-group">
     {{#each shortcuts}}
     <li class="list-group-item agent-shortcut">
+    <div>
+      <a class="agent-shortcut-body" href="#">{{body}}</a> 
+    </div>
     <div class="agent-shortcut-controls">
       <a href="#" class="agent-shortcut-edit"><span class="glyphicon glyphicon-pencil"></span></a>
       <a href="#" class="agent-shortcut-delete"><span class="glyphicon glyphicon-remove"></span></a>
-    </div>
-    <div>
-      <a class="agent-shortcut-body" href="#">{{body}}</a> 
     </div>
     </li>
     {{/each}}
