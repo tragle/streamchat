@@ -1,6 +1,6 @@
 VisitorEntryController = RouteController.extend({
   waitOn: function () {
-    Meteor.subscribe('connections');
+    Meteor.subscribe('skillGroups');
   },
 
   layoutTemplate: 'VisitorEntry',

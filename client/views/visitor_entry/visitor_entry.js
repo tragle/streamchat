@@ -34,6 +34,19 @@ Template.VisitorEntry.events({
 });
 
 Template.VisitorEntry.helpers({
+  issues: function() {
+    var allIssues = [];
+    Groups.find({'connections': {$ne: []}}).forEach(function(group) {
+      if (group.connections) {
+        _.each(group.connections, function(user) {
+          allIssues.push(user.skills);
+        });
+      }
+    });
+    return _.uniq(_.flatten(allIssues))
+  }
+
+
   /*
    * Example: 
    *  items: function () {

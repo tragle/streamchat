@@ -19,3 +19,7 @@ Meteor.publish('allGroups', function() {
   return Groups.find();
 });
 
+Meteor.publish('skillGroups', function() {
+  return Groups.find({'connections': {$ne: []}});
+});
+
