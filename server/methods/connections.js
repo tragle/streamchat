@@ -49,9 +49,10 @@ Meteor.methods({
       if (!toName) toName = '';
       if (!toId) tiId = '';
       var displayName = Meteor.users.findOne({'_id': this.userId}).profile.displayName;
+      var isVisitor = App.isVisitor(this.userId);
       return Previews.upsert(
         {'_id': this.userId}, 
-        {$set: {'group': groupId, 'body': message, 'to': toName, 'toId': toId, 'displayName': displayName}});
+        {$set: {'group': groupId, 'body': message, 'to': toName, 'toId': toId, 'displayName': displayName, 'isVisitor': isVisitor}});
     }
   }
 });

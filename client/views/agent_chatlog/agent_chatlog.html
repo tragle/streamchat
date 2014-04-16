@@ -2,7 +2,7 @@
 <div id="agent-chatlog">
   {{#if currentGroup}}
   {{#each messages}}
-  <div class="message {{#if isVisitor}}visitor{{else}}agent{{/if}} {{#if isDraft}}draft{{/if}} {{#if expired}}text-info expired{{/if}}">
+  <div class="message {{#if isVisitor}}visitor{{else}}agent{{/if}} {{#if recipientName}}response{{/if}}  {{#if expired}}text-info expired{{/if}}">
     {{#if isVisitor}}
 
     <span class="body">{{body}}</span>
@@ -20,23 +20,25 @@
       {{/if}}  
     </span>
 
-    <span class="body">{{body}}</span>
+    <span class="body {{#if isDraft}}draft{{/if}}">{{body}}
     {{#if isDraft}}
     <p class="draft-controls">
     <a class="send-draft" href="#">Send</a>
     </p>
     {{/if}}
-
+    </span>
 
     {{/if}}
-
   </div>
   {{/each}}
   {{#each previews}}
   {{#if body}}
-  <div class="message message-preview text-muted">
-    <span class="sender">{{displayName}} {{#if to}} >
-      {{to}} {{/if}}</span> <span class="body">{{body}}</span>
+  <div class="message message-preview text-muted {{#if isVisitor}}visitor{{else}}agent{{/if}}">
+    {{#if isVisitor}}
+    <span class="body">{{body}}</span> <span class="sender">{{displayName}}</span> 
+    {{else}}
+    <span class="sender">{{displayName}} {{#if to}} > {{to}} {{/if}}</span> <span class="body">{{body}}</span> 
+    {{/if}}
   </div>
   {{/if}}
   {{/each}}
