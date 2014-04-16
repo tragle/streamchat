@@ -40,7 +40,11 @@ Template.AgentShortcuts.events({
 Template.AgentShortcuts.helpers({
   shortcuts: function() {
     if (Session.get('shortcutsSearch')) {
-      return Shortcuts.find({'body': {$regex: Session.get('shortcutsSearch'), $options: 'i'}});
+      return Shortcuts.find({$or: [
+        {'body': {$regex: Session.get('shortcutsSearch'), $options: 'i'}},
+        {'tags': {$in: [Session.get('shortcutsSearch')]}}
+      ]
+      });
     } else {
       return Shortcuts.find();
     }

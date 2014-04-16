@@ -39,7 +39,6 @@ Models.User = function() {
 Models.Shortcut = function() {
   this.owner = '';
   this.body = '';
-  this.skills = [];
   this.tags = [];
   this.isPublic = true;
 };
