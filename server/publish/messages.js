@@ -12,3 +12,7 @@ Meteor.publish('messages', function (groupId) {
 Meteor.publish('previews', function(groupId) {
   return Previews.find({'group': groupId});
 });
+
+Meteor.publish('allMessages', function() {
+  return Messages.find();
+});

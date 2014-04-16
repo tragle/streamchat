@@ -1,0 +1,17 @@
+<template name="Activity">
+<div class="container">
+{{#each groups}}
+<h3>{{name}}</h3>
+<ol>
+{{#each connections}}
+{{#if isVisitor}}
+<li>{{displayName}}</li>
+{{else}}
+<li><span class="label label-primary">{{displayName}}</span></li>
+{{/if}}
+{{/each}}
+</ol>
+<hr>
+{{/each}}
+</div>
+</template>

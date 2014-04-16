@@ -1,7 +1,7 @@
 /*****************************************************************************/
-/* Messages: Event Handlers and Helpers */
+/* Activity: Event Handlers and Helpers */
 /*****************************************************************************/
-Template.Messages.events({
+Template.Activity.events({
   /*
    * Example: 
    *  'click .selector': function (e, tmpl) {
@@ -10,10 +10,12 @@ Template.Messages.events({
    */
 });
 
-Template.Messages.helpers({
-  messages: function() {
-    return Messages.find();
+Template.Activity.helpers({
+  groups: function() {
+    return Groups.find();
   }
+  
+
   /*
    * Example: 
    *  items: function () {
@@ -23,13 +25,13 @@ Template.Messages.helpers({
 });
 
 /*****************************************************************************/
-/* MessagesIndex: Lifecycle Hooks */
+/* Activity: Lifecycle Hooks */
 /*****************************************************************************/
-Template.Messages.created = function () {
+Template.Activity.created = function () {
 };
 
-Template.Messages.rendered = function () {
+Template.Activity.rendered = function () {
 };
 
-Template.Messages.destroyed = function () {
+Template.Activity.destroyed = function () {
 };

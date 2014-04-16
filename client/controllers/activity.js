@@ -1,6 +1,6 @@
-MessagesController = RouteController.extend({
+ActivityController = RouteController.extend({
   waitOn: function () {
-    Meteor.subscribe('allMessages');
+    Meteor.subscribe('allGroups');
   },
 
   data: function () {

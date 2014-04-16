@@ -33,8 +33,8 @@ Deps.autorun(function() {
   }
 });
 
-Meteor.setInterval(function() {
-  if (Meteor.user()) {
+ Meteor.setInterval(function() {
+  if (Meteor.user() && Session.get('currentGroup')) {
     Meteor.call('keepAlive', function(error, success) {
       if (!success && App.isVisitor(Meteor.userId())) {
         Meteor.logout();

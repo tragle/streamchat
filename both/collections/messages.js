@@ -1,2 +1,2 @@
-Messages = new Meteor.Collection('messages');
+Messages = new Meteor.Collection('allMessages');
 Previews = new Meteor.Collection('previews');

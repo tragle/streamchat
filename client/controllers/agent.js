@@ -92,6 +92,7 @@ AgentController = RouteController.extend({
     if (Session.get('currentGroup')) {
       Meteor.call('leaveGroup', Session.get('currentGroup'));
     }
+    Session.set('currentGroup', '');
   }
 
 });

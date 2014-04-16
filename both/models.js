@@ -19,7 +19,7 @@ Models.Message = function() {
   this.recipientName = '';
   this.isVisitor = false;
   this.isDraft = false;
-  this.date = new Date;
+  this.date = '';
   this.expired = null;
 };
 

@@ -31,10 +31,11 @@ Template.Agent.destroyed = function () {
 };
 
 Deps.autorun(function() {
-  if (!Session.get('currentGroup')) {
+/*  if (!Session.get('currentGroup')) {
     Meteor.call('routeAgent', function(error, result) {
       Session.set('currentGroup', result);
     });
   }
+  */
 });
 

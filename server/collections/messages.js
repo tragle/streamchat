@@ -15,3 +15,13 @@ Meteor.setInterval(function() {
   }
 }, 60000);
 
+Meteor.setInterval(function() {
+  Previews.find().forEach(function(preview) {
+    if (!Groups.findOne({'connections._id': preview._id})) {
+      Previews.remove(preview._id);
+    }
+  });
+}, 60000);
+
+
+

@@ -56,7 +56,7 @@
   display: inline-block;
   vertical-align: top;
   font-weight: bold;
-  padding: 4px;
+  padding: 6px;
 }
 
 .agent.message .sender {
@@ -74,13 +74,12 @@
 .agent.message-preview {
   margin-left: 10px;
 }
-
-message-preview .body {
-  background: white;
-}
-
 .message.expired {
   font-style: italic;
+}
+
+.message.message-preview .body {
+  background: white;
 }
 
 .message .body.draft {
@@ -125,3 +124,6 @@ message-preview .body {
 .message-shortcut-new input {
   margin-bottom: 5px;
 }
+
+
+

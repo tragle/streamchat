@@ -14,3 +14,8 @@ Meteor.publish('autoGroupSettings', function() {
   return AutoGroupSettings.find();
 });
 
+Meteor.publish('allGroups', function() {
+  App.checkIsAdmin(this.userId);
+  return Groups.find();
+});
+

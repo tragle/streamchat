@@ -67,6 +67,7 @@ Meteor.methods({
     if (userId && groupId) {
       Meteor.call('expireMessages', userId);
     }
+    Previews.remove({'_id': userId})
   },
   getVisitorHeadroom: function(groupId) {
     var group = Groups.findOne(groupId);

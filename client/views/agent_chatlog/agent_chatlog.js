@@ -111,7 +111,10 @@ Template.AgentChatlog.helpers({
       previewData = Previews.find({
         'group': Session.get('currentGroup'),
         'body': {$ne: ''},
-        'toId': {$in: solos}
+        $or: [
+          {'toId': {$in: solos}},
+          {'_id': {$in: solos}}
+        ]
       });
     } else {
       previewData = Previews.find({
@@ -140,4 +143,8 @@ Template.AgentChatlog.rendered = function () {
 };
 
 Template.AgentChatlog.destroyed = function () {
+  if (Session.get('currentGroup')) {
+    Meteor.call('leaveGroup', Session.get('currentGroup'));
+    Session.set('currentGroup', '');
+  }
 };
